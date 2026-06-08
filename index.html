@@ -223,14 +223,14 @@
     <span>Cost Tracker</span>
   </div>
   <nav>
-    <a data-view="expenses" class="active">Expenses</a>
-    <a data-view="balances">Balances</a>
+    <a data-view="expenses">Expenses</a>
+    <a data-view="balances" class="active">Balances</a>
   </nav>
 </div>
 
 <main id="main">
-  <div id="view-expenses" class="view active"></div>
-  <div id="view-balances" class="view"></div>
+  <div id="view-expenses" class="view"></div>
+  <div id="view-balances" class="view active"></div>
 </main>
 
 <div id="modal-overlay">
@@ -240,7 +240,7 @@
 <script>
 let appData = null;
 let activeCategory = null;
-let activeView = 'expenses';
+let activeView = 'balances';
 
 // ===== HELPERS =====
 function escHtml(str) {
