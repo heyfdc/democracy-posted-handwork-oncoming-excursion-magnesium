@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japan 2026 · Costs (View Only)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface-raised: #222;
+      --border: #2a2a2a;
+      --text: #e8e0d0;
+      --text-secondary: #888;
+      --text-muted: #555;
+      --accent: #c8a97a;
+      --green: #7ab87a;
+      --red: #b87a7a;
+      --sidebar-width: 160px;
+      --banner-height: 42px;
+    }
+
+    /* ---- Last Updated Banner ---- */
+    #banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      height: var(--banner-height);
+      background: var(--accent);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    #banner-dot {
+      width: 7px; height: 7px;
+      background: #111;
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+    #banner-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(0,0,0,0.15);
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      height: 100vh;
+      display: flex;
+      padding-top: var(--banner-height);
+      overflow: hidden;
+    }
+
+    /* ---- Sidebar ---- */
+    #sidebar {
+      width: var(--sidebar-width);
+      background: #161616;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    #sidebar-title {
+      padding: 20px 16px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    #sidebar-title span {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    nav a {
+      display: block;
+      padding: 10px 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, background 0.15s;
+    }
+    nav a:hover { color: var(--text); }
+    nav a.active { color: var(--accent); background: var(--surface); border-left-color: var(--accent); }
+
+    /* ---- Main ---- */
+    #main { flex: 1; overflow-y: auto; padding: 28px 32px; }
+    .view { display: none; }
+    .view.active { display: block; }
+    h1 { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: var(--text); letter-spacing: -0.01em; }
+
+    /* ---- Expenses ---- */
+    .expenses-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .date-group { margin-bottom: 28px; }
+    .date-group-label {
+      font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 8px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .expense-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; border-radius: 4px;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .expense-row:hover { background: var(--surface-raised); }
+    .expense-desc { flex: 1; font-size: 13px; color: var(--text); }
+    .expense-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .expense-amount { font-size: 13px; color: var(--accent); font-weight: 500; white-space: nowrap; }
+
+    /* ---- Category filter chips ---- */
+    .who-chip {
+      padding: 3px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;
+      background: var(--surface-raised); border: 1px solid var(--border);
+      color: var(--text-muted); user-select: none;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    .who-chip:hover:not(.selected) { border-color: var(--text-muted); color: var(--text-secondary); }
+    .who-chip.selected { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 600; }
+
+    /* ---- Expense tags ---- */
+    .expense-tag {
+      font-size: 10px; padding: 2px 7px; border-radius: 3px;
+      font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap;
+    }
+    .expense-tag.complete { background: rgba(122,184,122,0.12); color: var(--green); }
+    .expense-tag.incomplete { background: rgba(85,85,85,0.25); color: var(--text-muted); }
+
+    /* ---- Payment chips (view-only) ---- */
+    .expense-payments { padding: 0 12px 10px; display: flex; flex-wrap: wrap; gap: 5px; }
+    .payment-chip-view {
+      font-size: 11px; padding: 3px 9px; border-radius: 3px;
+      border: 1px solid var(--border); background: none; color: var(--text-muted);
+    }
+    .payment-chip-view.paid { background: rgba(122,184,122,0.1); border-color: rgba(122,184,122,0.4); color: var(--green); }
+
+    /* ---- Balances ---- */
+    .balances-section { margin-bottom: 32px; }
+    .balances-section h2 { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+    .settlement-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 4px; background: var(--surface); margin-bottom: 6px; font-size: 13px; }
+    .settlement-amount { margin-left: auto; color: var(--accent); font-weight: 500; }
+    .net-cards { display: flex; flex-wrap: wrap; gap: 10px; }
+    .net-card { background: var(--surface); border-radius: 4px; padding: 14px 18px; min-width: 120px; border: 1px solid var(--border); }
+    .net-card-name { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .net-card-amount { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+    .net-card-amount.positive { color: var(--green); }
+    .net-card-amount.negative { color: var(--red); }
+    .net-card-amount.zero { color: var(--text-muted); }
+    .net-card-detail { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ---- Modal ---- */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    #modal-overlay.open { display: flex; animation: overlayIn 0.15s ease; }
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    #modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 24px; width: 440px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header h2 { font-size: 16px; font-weight: 600; }
+    .modal-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 22px; line-height: 1; padding: 0; }
+    .modal-close:hover { color: var(--text); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    .btn { display: inline-flex; align-items: center; padding: 7px 14px; border-radius: 4px; border: none; font-size: 13px; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+    .btn-secondary { background: var(--surface-raised); color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn:hover { opacity: 0.85; }
+    .modal-balance-group { margin-bottom: 16px; }
+    .modal-balance-group-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .modal-balance-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text); padding: 5px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+    .modal-balance-item span:last-child { color: var(--accent); font-weight: 500; white-space: nowrap; }
+    .modal-balance-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+    /* ---- Misc ---- */
+    .empty-state { text-align: center; color: var(--text-muted); padding: 60px 0; font-size: 13px; line-height: 1.6; }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 600px) {
+      body { flex-direction: column; overflow: auto; height: auto; min-height: 100svh; }
+      #banner { font-size: 11px; gap: 8px; }
+      #sidebar { width: 100%; flex-direction: row; flex-shrink: 0; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      #sidebar-title { border-bottom: none; padding: 12px 16px; white-space: nowrap; }
+      nav { display: flex; flex-direction: row; overflow-x: auto; }
+      nav a { padding: 12px 14px; border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+      nav a.active { border-left-color: transparent; border-bottom-color: var(--accent); background: transparent; }
+      #main { padding: 20px 16px; overflow-y: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="banner">
+  <span id="banner-badge">View Only</span>
+  <div id="banner-dot"></div>
+  <span id="banner-text">Loading…</span>
+</div>
+
+<div id="sidebar">
+  <div id="sidebar-title">
+    <div id="trip-name-display">Japan 2026</div>
+    <span>Cost Tracker</span>
+  </div>
+  <nav>
+    <a data-view="expenses" class="active">Expenses</a>
+    <a data-view="balances">Balances</a>
+  </nav>
+</div>
+
+<main id="main">
+  <div id="view-expenses" class="view active"></div>
+  <div id="view-balances" class="view"></div>
+</main>
+
+<div id="modal-overlay">
+  <div id="modal"></div>
+</div>
+
+<script>
+let appData = null;
+let activeCategory = null;
+let activeView = 'expenses';
+
+// ===== HELPERS =====
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function formatAmount(amount, symbol) {
+  return `${symbol}${Number(amount).toFixed(2)}`;
+}
+
+function formatDate(isoDate) {
+  const [y, m, d] = isoDate.split('-');
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function formatSyncedAt(iso) {
+  if (!iso) return 'unknown';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+  });
+}
+
+// ===== MATH =====
+function isExpenseComplete(expense) {
+  const nonPayers = Object.keys(expense.split.amountPerPerson).filter(p => p !== expense.paidBy);
+  if (!nonPayers.length) return true;
+  const paidBack = expense.paidBack || {};
+  return nonPayers.every(p => paidBack[p]);
+}
+
+function computeSettlements(nets) {
+  const creditors = [], debtors = [];
+  Object.entries(nets).forEach(([name, net]) => {
+    if (net > 0.005) creditors.push({ name, amount: net });
+    if (net < -0.005) debtors.push({ name, amount: -net });
+  });
+  creditors.sort((a, b) => b.amount - a.amount);
+  debtors.sort((a, b) => b.amount - a.amount);
+  const settlements = [];
+  let ci = 0, di = 0;
+  while (ci < creditors.length && di < debtors.length) {
+    const transfer = Math.min(creditors[ci].amount, debtors[di].amount);
+    settlements.push({ from: debtors[di].name, to: creditors[ci].name, amount: Math.round(transfer * 100) / 100 });
+    creditors[ci].amount = Math.round((creditors[ci].amount - transfer) * 100) / 100;
+    debtors[di].amount = Math.round((debtors[di].amount - transfer) * 100) / 100;
+    if (creditors[ci].amount < 0.005) ci++;
+    if (debtors[di].amount < 0.005) di++;
+  }
+  return settlements;
+}
+
+function computePairwiseDebts(expenses) {
+  const pairwise = {};
+  expenses.forEach(e => {
+    const payer = e.paidBy;
+    const paidBack = e.paidBack || {};
+    Object.entries(e.split.amountPerPerson).forEach(([name, amt]) => {
+      if (name === payer || paidBack[name]) return;
+      if (!pairwise[name]) pairwise[name] = {};
+      pairwise[name][payer] = Math.round(((pairwise[name][payer] || 0) + amt) * 100) / 100;
+    });
+  });
+  const result = [];
+  Object.entries(pairwise).forEach(([from, creditors]) => {
+    Object.entries(creditors).forEach(([to, amount]) => {
+      if (amount > 0.005) result.push({ from, to, amount });
+    });
+  });
+  return result;
+}
+
+// ===== RENDER =====
+function setCategory(cat) {
+  activeCategory = cat;
+  renderExpenses();
+}
+
+function renderExpenses() {
+  const el = document.getElementById('view-expenses');
+  const { expenses, categories, currencySymbol } = appData;
+
+  if (!expenses.length) {
+    el.innerHTML = `<h1>Expenses</h1><div class="empty-state">No expenses yet.</div>`;
+    return;
+  }
+
+  const filtered = activeCategory ? expenses.filter(e => e.category === activeCategory) : expenses;
+  const grandTotal = filtered.reduce((s, e) => s + e.amount, 0);
+
+  const filterChips = categories.length ? `
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:20px">
+      <span class="who-chip${activeCategory === null ? ' selected' : ''}" onclick="setCategory(null)">All</span>
+      ${categories.map(c => `<span class="who-chip${activeCategory === c ? ' selected' : ''}" onclick="setCategory(${JSON.stringify(c).replace(/"/g,'&quot;')})">${escHtml(c)}</span>`).join('')}
+      <span style="margin-left:auto;font-size:13px;color:var(--accent);font-weight:500">${formatAmount(grandTotal, currencySymbol)}</span>
+    </div>` : '';
+
+  if (!filtered.length) {
+    el.innerHTML = `<h1>Expenses</h1>${filterChips}<div class="empty-state">No expenses in this category.</div>`;
+    return;
+  }
+
+  const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date));
+  const groups = {};
+  sorted.forEach(e => { if (!groups[e.date]) groups[e.date] = []; groups[e.date].push(e); });
+
+  const groupsHtml = Object.entries(groups).map(([date, exps]) => {
+    const groupTotal = exps.reduce((s, e) => s + e.amount, 0);
+    return `
+    <div class="date-group">
+      <div class="date-group-label" style="display:flex;justify-content:space-between">
+        <span>${formatDate(date)}</span>
+        <span>${formatAmount(groupTotal, currencySymbol)}</span>
+      </div>
+      ${exps.map(e => {
+        const complete = isExpenseComplete(e);
+        const nonPayers = Object.keys(e.split.amountPerPerson).filter(p => p !== e.paidBy);
+        const paidBack = e.paidBack || {};
+        const paymentsHtml = nonPayers.length ? `
+          <div class="expense-payments">
+            ${nonPayers.map(p => {
+              const isPaid = !!paidBack[p];
+              return `<span class="payment-chip-view${isPaid ? ' paid' : ''}">${escHtml(p)}${isPaid ? ' ✓' : ''}</span>`;
+            }).join('')}
+          </div>` : '';
+        return `
+        <div>
+          <div class="expense-row" onclick="openExpenseDetail('${e.id}')">
+            <div style="flex:1">
+              <div class="expense-desc">${escHtml(e.description)}</div>
+              <div class="expense-meta">${escHtml(e.category)} · paid by ${escHtml(e.paidBy)}</div>
+            </div>
+            <span class="expense-tag ${complete ? 'complete' : 'incomplete'}">${complete ? 'complete' : 'incomplete'}</span>
+            <div class="expense-amount">${formatAmount(e.amount, currencySymbol)}</div>
+          </div>
+          ${paymentsHtml}
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<h1>Expenses</h1>${filterChips}${groupsHtml}`;
+}
+
+function renderBalances() {
+  const { expenses, people, currencySymbol } = appData;
+  const el = document.getElementById('view-balances');
+
+  if (people.length < 2) {
+    el.innerHTML = `<h1>Balances</h1><div class="empty-state">Add at least 2 people to see balances.</div>`;
+    return;
+  }
+  if (!expenses.length) {
+    el.innerHTML = `<h1>Balances</h1><div class="empty-state">No expenses yet.</div>`;
+    return;
+  }
+
+  const debts = computePairwiseDebts(expenses);
+
+  const liveNets = {};
+  people.forEach(p => { liveNets[p] = 0; });
+  expenses.forEach(e => {
+    const payer = e.paidBy;
+    const paidBack = e.paidBack || {};
+    Object.entries(e.split.amountPerPerson).forEach(([name, amt]) => {
+      if (name === payer || paidBack[name]) return;
+      liveNets[payer] = Math.round((liveNets[payer] + amt) * 100) / 100;
+      liveNets[name] = Math.round((liveNets[name] - amt) * 100) / 100;
+    });
+  });
+
+  let settlementsHtml;
+  if (!debts.length) {
+    settlementsHtml = '<p style="color:var(--text-muted);font-size:13px">Everyone is settled up!</p>';
+  } else {
+    const grouped = {};
+    debts.forEach(d => {
+      if (!grouped[d.from]) grouped[d.from] = [];
+      grouped[d.from].push(d);
+    });
+    settlementsHtml = Object.entries(grouped).map(([from, rows]) => `
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">${escHtml(from)} owes</div>
+        ${rows.map(s => `
+          <div class="settlement-row">
+            <span style="color:var(--text)">${escHtml(s.to)}</span>
+            <span class="settlement-amount">${formatAmount(s.amount, currencySymbol)}</span>
+          </div>`).join('')}
+      </div>`).join('');
+  }
+
+  const totalPaid = {};
+  people.forEach(p => { totalPaid[p] = 0; });
+  expenses.forEach(e => { totalPaid[e.paidBy] = (totalPaid[e.paidBy] || 0) + e.amount; });
+
+  const cardsHtml = people.map(p => {
+    const net = liveNets[p];
+    const cls = net > 0.005 ? 'positive' : net < -0.005 ? 'negative' : 'zero';
+    const sign = net > 0.005 ? '+' : '';
+    const label = net > 0.005 ? 'outstanding' : net < -0.005 ? 'outstanding' : 'settled';
+    const pjs = JSON.stringify(p).replace(/"/g, '&quot;');
+    return `
+      <div class="net-card" style="cursor:pointer" onclick="openPersonBalanceModal(${pjs})">
+        <div class="net-card-name">${escHtml(p)}</div>
+        <div class="net-card-amount ${cls}">${sign}${formatAmount(Math.abs(net), currencySymbol)}</div>
+        <div class="net-card-detail">${label}</div>
+      </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <h1>Balances</h1>
+    <div style="font-size:12px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:10px 14px;margin-bottom:20px">
+      Click your name below to see a full breakdown of what you owe and what you're owed.
+    </div>
+    <div class="balances-section">
+      <h2>Net balances</h2>
+      <div class="net-cards">${cardsHtml}</div>
+    </div>
+    <div class="balances-section">
+      <h2>To settle up</h2>
+      ${settlementsHtml}
+    </div>`;
+}
+
+function renderSettle() {
+  const { expenses, people, currencySymbol: sym } = appData;
+  const el = document.getElementById('view-settle');
+
+  if (people.length < 2) {
+    el.innerHTML = `<h1>Settle</h1><div class="empty-state">Add at least 2 people in Settings.</div>`;
+    return;
+  }
+  if (!expenses.length) {
+    el.innerHTML = `<h1>Settle</h1><div class="empty-state">No expenses yet.</div>`;
+    return;
+  }
+
+  const liveNets = {};
+  people.forEach(p => { liveNets[p] = 0; });
+  expenses.forEach(e => {
+    const payer = e.paidBy;
+    const paidBack = e.paidBack || {};
+    Object.entries(e.split.amountPerPerson).forEach(([name, amt]) => {
+      if (name === payer || paidBack[name]) return;
+      liveNets[payer] = Math.round((liveNets[payer] + amt) * 100) / 100;
+      liveNets[name] = Math.round((liveNets[name] - amt) * 100) / 100;
+    });
+  });
+
+  const settlements = computeSettlements(liveNets);
+
+  const breakdown = {};
+  expenses.forEach(e => {
+    const payer = e.paidBy;
+    const paidBack = e.paidBack || {};
+    Object.entries(e.split.amountPerPerson).forEach(([name, amt]) => {
+      if (name === payer || paidBack[name]) return;
+      if (!breakdown[name]) breakdown[name] = {};
+      if (!breakdown[name][payer]) breakdown[name][payer] = [];
+      breakdown[name][payer].push({ description: e.description, amount: amt });
+    });
+  });
+
+  if (!settlements.length) {
+    el.innerHTML = `<h1>Settle</h1><div class="empty-state">Everyone is settled up!</div>`;
+    return;
+  }
+
+  const settlementsHtml = settlements.map(s => {
+    const debtsByCreditor = breakdown[s.from] || {};
+    const creditorRows = Object.entries(debtsByCreditor).map(([creditor, items]) => {
+      const subtotal = Math.round(items.reduce((sum, i) => sum + i.amount, 0) * 100) / 100;
+      return `
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px">Owes ${escHtml(creditor)}</div>
+          ${items.map(i => `
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:3px 0;border-bottom:1px solid var(--border)">
+              <span>${escHtml(i.description)}</span>
+              <span style="white-space:nowrap;padding-left:12px">${formatAmount(i.amount, sym)}</span>
+            </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--text);padding:5px 0 0">
+            <span>Subtotal</span><span>${formatAmount(subtotal, sym)}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:16px 18px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:${creditorRows ? '16px' : '0'};padding-bottom:${creditorRows ? '14px' : '0'};border-bottom:${creditorRows ? '1px solid var(--border)' : 'none'}">
+          <span style="font-size:14px;font-weight:600;color:var(--text)">${escHtml(s.from)}</span>
+          <span style="font-size:12px;color:var(--text-muted)">pays</span>
+          <span style="font-size:14px;font-weight:600;color:var(--text)">${escHtml(s.to)}</span>
+          <span style="margin-left:auto;color:var(--accent);font-weight:600;font-size:16px">${formatAmount(s.amount, sym)}</span>
+        </div>
+        ${creditorRows}
+      </div>`;
+  }).join('');
+
+  const netCardsHtml = people.map(p => {
+    const net = liveNets[p];
+    const cls = net > 0.005 ? 'positive' : net < -0.005 ? 'negative' : 'zero';
+    const sign = net > 0.005 ? '+' : '';
+    return `
+      <div class="net-card">
+        <div class="net-card-name">${escHtml(p)}</div>
+        <div class="net-card-amount ${cls}">${sign}${formatAmount(Math.abs(net), sym)}</div>
+      </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <h1>Settle</h1>
+    <div class="balances-section">
+      <h2>Net positions</h2>
+      <div class="net-cards">${netCardsHtml}</div>
+    </div>
+    <div class="balances-section">
+      <h2>Optimized — ${settlements.length} transaction${settlements.length === 1 ? '' : 's'}</h2>
+      ${settlementsHtml}
+    </div>`;
+}
+
+function renderCurrentView() {
+  if (activeView === 'expenses') renderExpenses();
+  if (activeView === 'balances') renderBalances();
+}
+
+// ===== BALANCE MODAL =====
+function openPersonBalanceModal(person) {
+  const { expenses, currencySymbol: sym } = appData;
+
+  const owes = {}, owed = {}, owesPaid = {}, owedPaid = {};
+
+  expenses.forEach(e => {
+    const payer = e.paidBy;
+    const paidBack = e.paidBack || {};
+    if (payer === person) {
+      Object.entries(e.split.amountPerPerson).forEach(([name, amt]) => {
+        if (name === person) return;
+        const bucket = paidBack[name] ? owedPaid : owed;
+        if (!bucket[name]) bucket[name] = [];
+        bucket[name].push({ description: e.description, amount: amt });
+      });
+    } else {
+      const amt = e.split.amountPerPerson[person];
+      if (!amt) return;
+      const bucket = paidBack[person] ? owesPaid : owes;
+      if (!bucket[payer]) bucket[payer] = [];
+      bucket[payer].push({ description: e.description, amount: amt });
+    }
+  });
+
+  const sumItems = items => items.reduce((s, i) => s + i.amount, 0);
+  const sumEntries = entries => entries.reduce((s, [, items]) => s + sumItems(items), 0);
+
+  const owesEntries = Object.entries(owes);
+  const owedEntries = Object.entries(owed);
+  const owesPaidEntries = Object.entries(owesPaid);
+  const owedPaidEntries = Object.entries(owedPaid);
+
+  const owesTotal = sumEntries(owesEntries);
+  const owedTotal = sumEntries(owedEntries);
+  const net = Math.round((owedTotal - owesTotal) * 100) / 100;
+
+  const renderGroup = (label, entries) => entries.map(([counterpart, items]) => `
+    <div class="modal-balance-group">
+      <div class="modal-balance-group-label">${escHtml(label)} ${escHtml(counterpart)}</div>
+      ${items.map(i => `
+        <div class="modal-balance-item">
+          <span>${escHtml(i.description)}</span>
+          <span>${formatAmount(i.amount, sym)}</span>
+        </div>`).join('')}
+    </div>`).join('');
+
+  const renderPaidGroup = (label, entries) => entries.map(([counterpart, items]) => `
+    <div class="modal-balance-group">
+      <div class="modal-balance-group-label" style="color:var(--text-muted)">${escHtml(label)} ${escHtml(counterpart)}</div>
+      ${items.map(i => `
+        <div class="modal-balance-item" style="opacity:0.5">
+          <span>${escHtml(i.description)}</span>
+          <span>${formatAmount(i.amount, sym)}</span>
+        </div>`).join('')}
+    </div>`).join('');
+
+  const owesHtml = owesEntries.length ? `
+    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Owes</div>
+    ${renderGroup('to', owesEntries)}
+    <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--red);padding:6px 0;border-top:1px solid var(--border)">
+      <span>Total owed out</span><span>${formatAmount(owesTotal, sym)}</span>
+    </div>` : '';
+
+  const owedHtml = owedEntries.length ? `
+    ${owesEntries.length ? '<hr class="modal-balance-divider">' : ''}
+    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Owed by</div>
+    ${renderGroup('from', owedEntries)}
+    <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--green);padding:6px 0;border-top:1px solid var(--border)">
+      <span>Total owed in</span><span>${formatAmount(owedTotal, sym)}</span>
+    </div>` : '';
+
+  const paidTotal = sumEntries(owesPaidEntries) + sumEntries(owedPaidEntries);
+  const paidHtml = (owesPaidEntries.length || owedPaidEntries.length) ? `
+    <hr class="modal-balance-divider">
+    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Paid</div>
+    ${owesPaidEntries.length ? renderPaidGroup('paid to', owesPaidEntries) : ''}
+    ${owedPaidEntries.length ? renderPaidGroup('received from', owedPaidEntries) : ''}
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);padding:4px 0;border-top:1px solid var(--border)">
+      <span>Total settled</span><span>${formatAmount(paidTotal, sym)}</span>
+    </div>` : '';
+
+  const netColor = net > 0.005 ? 'var(--green)' : net < -0.005 ? 'var(--red)' : 'var(--text-muted)';
+  const netSign = net > 0.005 ? '+' : '';
+
+  document.getElementById('modal').innerHTML = `
+    <div class="modal-header">
+      <h2>${escHtml(person)}</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    ${owesHtml || owedHtml
+      ? owesHtml + owedHtml
+      : '<p style="color:var(--text-muted);font-size:13px;padding:8px 0">Nothing outstanding.</p>'}
+    ${paidHtml}
+    <div class="modal-footer" style="justify-content:space-between;align-items:center">
+      <span style="font-size:13px;color:var(--text-muted)">Net &nbsp;<strong style="color:${netColor}">${netSign}${formatAmount(Math.abs(net), sym)}</strong></span>
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openExpenseDetail(id) {
+  const e = appData.expenses.find(x => x.id === id);
+  if (!e) return;
+  const sym = appData.currencySymbol;
+  const paidBack = e.paidBack || {};
+
+  const splitRows = Object.entries(e.split.amountPerPerson).map(([name, amt]) => {
+    const isPayer = name === e.paidBy;
+    const isPaid = isPayer || !!paidBack[name];
+    const statusLabel = isPayer ? 'paid' : (paidBack[name] ? 'settled ✓' : 'outstanding');
+    const statusColor = isPayer ? 'var(--text-muted)' : (paidBack[name] ? 'var(--green)' : 'var(--accent)');
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--text)">${escHtml(name)}${isPayer ? ' <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px">payer</span>' : ''}</span>
+        <span style="display:flex;gap:12px;align-items:center">
+          <span style="color:${statusColor};font-size:11px">${statusLabel}</span>
+          <span style="color:var(--accent);font-weight:500">${formatAmount(amt, sym)}</span>
+        </span>
+      </div>`;
+  }).join('');
+
+  const amounts = Object.values(e.split.amountPerPerson);
+  const isActuallyEven = e.split.type === 'even' &&
+    (Math.max(...amounts) - Math.min(...amounts)) <= 0.01;
+  const splitTypeLabel = e.split.type === 'itemized'
+    ? 'Itemized split'
+    : isActuallyEven ? 'Split evenly' : 'Custom split';
+
+  let itemizedHtml = '';
+  if (e.split.type === 'itemized') {
+    itemizedHtml = `
+      <div style="margin-top:16px">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Items</div>
+        ${e.split.items.map(item => `
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:4px 0;border-bottom:1px solid var(--border)">
+            <span>${escHtml(item.name)} <span style="color:var(--text-muted)">· ${item.people.map(escHtml).join(', ')}</span></span>
+            <span style="white-space:nowrap;padding-left:12px">${formatAmount(item.price, sym)}</span>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  document.getElementById('modal').innerHTML = `
+    <div class="modal-header">
+      <h2>${escHtml(e.description)}</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap">
+      <span>${formatDate(e.date)}</span>
+      <span>${escHtml(e.category)}</span>
+      <span>Paid by <strong style="color:var(--text)">${escHtml(e.paidBy)}</strong></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+      <span style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Total · ${splitTypeLabel}</span>
+      <span style="font-size:20px;font-weight:600;color:var(--accent)">${formatAmount(e.amount, sym)}</span>
+    </div>
+    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Per person</div>
+    ${splitRows}
+    ${itemizedHtml}
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  });
+});
+
+// ===== NAVIGATION =====
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    link.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(`view-${link.dataset.view}`).classList.add('active');
+    activeView = link.dataset.view;
+    renderCurrentView();
+  });
+});
+
+// ===== DATA FETCH =====
+async function fetchData() {
+  try {
+    const res = await fetch('./data.json?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    appData = await res.json();
+
+    document.getElementById('trip-name-display').textContent = appData.tripName || 'Japan 2026';
+    document.title = (appData.tripName || 'Japan 2026') + ' · Costs (View Only)';
+
+    const bannerText = document.getElementById('banner-text');
+    bannerText.textContent = 'Last updated: ' + formatSyncedAt(appData.syncedAt);
+
+    renderCurrentView();
+  } catch (e) {
+    document.getElementById('banner-text').textContent = 'Could not load data — ' + e.message;
+    document.getElementById('banner').style.background = 'var(--red)';
+    document.getElementById('banner').style.color = '#fff';
+  }
+}
+
+// Initial load + auto-refresh every 60 minutes
+fetchData();
+setInterval(fetchData, 60 * 60 * 1000);
+</script>
+</body>
+</html>

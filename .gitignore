@@ -1,0 +1,7 @@
+app.html
+scripts/
+src/
+tests/
+docs/
+.superpowers/
+japan-costs-*.json
