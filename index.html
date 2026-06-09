@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Japan 2026 · Costs (View Only)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -207,6 +210,272 @@
       nav a.active { border-left-color: transparent; border-bottom-color: var(--accent); background: transparent; }
       #main { padding: 20px 16px; overflow-y: auto; }
     }
+
+    /* =================== ITINERARY — REDESIGNED =================== */
+    #view-itinerary { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    .itin-root { max-width: 680px; margin: 0 auto; }
+
+    /* ---- Hero ---- */
+    .itin-hero {
+      position: relative; text-align: center;
+      padding: 28px 0 52px; overflow: hidden;
+    }
+    .itin-hero-orb {
+      position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+      width: 480px; height: 220px; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, rgba(200,169,122,0.1) 0%, rgba(200,169,122,0.04) 40%, transparent 70%);
+    }
+    .itin-hero-eyebrow {
+      font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 18px; font-weight: 700; opacity: 0.8;
+      position: relative;
+    }
+    .itin-hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(56px, 11vw, 96px); font-weight: 900;
+      color: var(--text); line-height: 0.88; letter-spacing: -0.03em;
+      margin-bottom: 6px; position: relative;
+    }
+    .itin-hero-year {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.38em; letter-spacing: 0.22em; font-weight: 600;
+      color: var(--accent); text-transform: uppercase; margin-top: 10px;
+      opacity: 0.85;
+    }
+    .itin-hero-rule {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, rgba(200,169,122,0.6), transparent);
+      margin: 22px auto 18px; position: relative;
+    }
+    .itin-hero-sub {
+      font-size: 11px; color: var(--text-muted); letter-spacing: 0.12em;
+      text-transform: uppercase; position: relative;
+    }
+    .itin-hero-people {
+      display: flex; gap: 5px; justify-content: center;
+      flex-wrap: wrap; margin-top: 14px; position: relative;
+    }
+    .itin-hero-person {
+      font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em;
+      padding: 3px 10px; border-radius: 100px; font-weight: 500;
+      border: 1px solid rgba(200,169,122,0.16); background: rgba(200,169,122,0.05);
+      transition: border-color 0.3s cubic-bezier(0.32,0.72,0,1), color 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-hero-person:hover { border-color: rgba(200,169,122,0.35); color: var(--accent); }
+
+    /* ---- Phase filter ---- */
+    .itin-phase-nav { display: flex; gap: 6px; margin-bottom: 36px; flex-wrap: wrap; justify-content: center; }
+    .itin-phase-btn {
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: none; color: var(--text-muted); font-size: 11px;
+      letter-spacing: 0.06em; cursor: pointer; font-family: inherit; font-weight: 500;
+      transition: all 0.4s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-phase-btn:hover {
+      color: var(--text); border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.035);
+    }
+    .itin-phase-btn.active {
+      background: var(--accent); color: #0f0f0f;
+      border-color: var(--accent); font-weight: 700;
+    }
+
+    /* ---- Phase header — editorial / Z-axis ---- */
+    .itin-phase-header { padding: 40px 0 18px; }
+    .itin-phase-header-inner {
+      display: flex; align-items: flex-end; gap: 18px;
+      padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .itin-phase-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 68px; font-weight: 900; line-height: 1;
+      letter-spacing: -0.04em;
+      color: rgba(255,255,255,0.045); flex-shrink: 0;
+      user-select: none;
+    }
+    .itin-phase-name { flex: 1; }
+    .itin-phase-pill {
+      display: inline-block; padding: 4px 12px; border-radius: 100px;
+      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      font-weight: 700; margin-bottom: 8px;
+    }
+    .itin-phase-pill.p1 { background: rgba(200,169,122,0.1); color: var(--accent); border: 1px solid rgba(200,169,122,0.2); }
+    .itin-phase-pill.p2 { background: rgba(122,184,122,0.1); color: var(--green); border: 1px solid rgba(122,184,122,0.2); }
+    .itin-phase-pill.p3 { background: rgba(148,120,210,0.1); color: #a07ed0; border: 1px solid rgba(148,120,210,0.2); }
+    .itin-phase-title-text {
+      font-size: 20px; font-weight: 700; color: var(--text);
+      letter-spacing: -0.02em; line-height: 1;
+    }
+    .itin-phase-meta {
+      font-size: 10px; color: var(--text-muted); letter-spacing: 0.06em;
+      margin-top: 6px; font-weight: 500;
+    }
+
+    /* ---- Day card — full Double-Bezel ---- */
+    .itin-day {
+      margin-bottom: 10px;
+      opacity: 0;
+      transform: translateY(22px);
+      filter: blur(5px);
+      transition:
+        opacity 0.75s cubic-bezier(0.32,0.72,0,1),
+        transform 0.75s cubic-bezier(0.32,0.72,0,1),
+        filter 0.75s cubic-bezier(0.32,0.72,0,1);
+      will-change: transform, opacity;
+    }
+    .itin-day.revealed { opacity: 1; transform: translateY(0); filter: blur(0); will-change: auto; }
+    .itin-day.hidden { display: none; }
+
+    /* Outer shell */
+    .itin-day-shell {
+      border: 1px solid rgba(255,255,255,0.065);
+      border-radius: 26px; padding: 2px;
+      background: rgba(255,255,255,0.018);
+      transition:
+        border-color 0.45s cubic-bezier(0.32,0.72,0,1),
+        background 0.45s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-day-shell:hover {
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.028);
+    }
+
+    /* Inner core */
+    .itin-day-inner {
+      background: #1c1c1c;
+      border-radius: 24px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.075);
+      overflow: hidden;
+    }
+
+    /* Day header */
+    .itin-day-hdr {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 22px; cursor: pointer; user-select: none;
+      transition: background 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-day-hdr:hover { background: rgba(255,255,255,0.028); }
+
+    /* Date box — nested card-within-card */
+    .itin-day-date {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 42px; flex-shrink: 0;
+      padding: 5px 8px; border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .itin-day-dow {
+      font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--text-muted); font-weight: 700; line-height: 1;
+    }
+    .itin-day-num-lbl {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 900; color: var(--text); line-height: 1.05;
+    }
+
+    .itin-day-info { flex: 1; min-width: 0; }
+    .itin-day-title {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      letter-spacing: -0.01em; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .itin-day-sub {
+      font-size: 11px; color: var(--text-muted); margin-top: 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .itin-loc {
+      padding: 4px 10px; border-radius: 100px; font-size: 9px;
+      letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; flex-shrink: 0;
+    }
+    .itin-loc.tokyo  { background: rgba(112,144,208,0.1); color: #7090d0; border: 1px solid rgba(112,144,208,0.18); }
+    .itin-loc.drive  { background: rgba(96,176,112,0.1);  color: #60b070; border: 1px solid rgba(96,176,112,0.18); }
+    .itin-loc.fuji   { background: rgba(192,112,112,0.1); color: #c07070; border: 1px solid rgba(192,112,112,0.18); }
+    .itin-loc.hakone { background: rgba(144,112,192,0.1); color: #9070c0; border: 1px solid rgba(144,112,192,0.18); }
+
+    /* Chevron — circle island */
+    .itin-chevron {
+      flex-shrink: 0;
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); font-size: 10px; line-height: 1;
+      transition:
+        transform 0.5s cubic-bezier(0.32,0.72,0,1),
+        border-color 0.3s,
+        background 0.3s;
+    }
+    .itin-day-inner.open .itin-chevron {
+      transform: rotate(180deg);
+      border-color: rgba(200,169,122,0.25);
+      background: rgba(200,169,122,0.08);
+      color: var(--accent);
+    }
+
+    /* Events panel */
+    .itin-events {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.65s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-day-inner.open .itin-events { max-height: 3200px; }
+
+    .itin-event {
+      display: grid; grid-template-columns: 78px 10px 1fr;
+      gap: 0 14px; align-items: start;
+      padding: 12px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-event:last-child { border-bottom: none; }
+    .itin-event:hover { background: rgba(255,255,255,0.018); }
+    .itin-event.hi { background: rgba(200,169,122,0.03); }
+    .itin-event.hi:hover { background: rgba(200,169,122,0.055); }
+
+    .itin-evt-time {
+      font-size: 9px; color: var(--text-muted); text-align: right;
+      padding-top: 4px; letter-spacing: 0.07em; text-transform: uppercase;
+      line-height: 1.3; font-weight: 500;
+    }
+    .itin-evt-dot {
+      width: 8px; height: 8px; border-radius: 50%; margin-top: 5px;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22);
+      flex-shrink: 0;
+    }
+    .itin-evt-dot.gold {
+      background: var(--accent); border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(200,169,122,0.18), 0 0 10px rgba(200,169,122,0.2);
+    }
+    .itin-evt-dot.green {
+      background: var(--green); border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(122,184,122,0.18);
+    }
+
+    .itin-evt-body strong {
+      font-size: 12.5px; font-weight: 600; color: var(--text);
+      display: block; line-height: 1.4;
+    }
+    .itin-evt-body p {
+      font-size: 11px; color: var(--text-secondary);
+      margin-top: 4px; line-height: 1.7;
+    }
+
+    .itin-badge-res  { display: inline-block; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(184,122,122,0.12); color: var(--red); border: 1px solid rgba(184,122,122,0.2); padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; font-weight: 700; }
+    .itin-badge-book { display: inline-block; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(122,184,122,0.1); color: var(--green); border: 1px solid rgba(122,184,122,0.18); padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; font-weight: 700; }
+
+    @media (max-width: 600px) {
+      .itin-event { grid-template-columns: 56px 10px 1fr; gap: 0 10px; padding: 10px 16px; }
+      .itin-day-hdr { padding: 13px 16px; gap: 12px; }
+      .itin-day-sub { display: none; }
+      .itin-hero { padding: 12px 0 32px; }
+      .itin-phase-num { font-size: 44px; }
+      .itin-phase-title-text { font-size: 16px; }
+      .itin-hero-title { font-size: clamp(46px, 14vw, 72px); }
+    }
   </style>
 </head>
 <body>
@@ -225,12 +494,483 @@
   <nav>
     <a data-view="balances" class="active">Balances</a>
     <a data-view="expenses">Expenses</a>
+    <a data-view="itinerary">Itinerary</a>
   </nav>
 </div>
 
 <main id="main">
   <div id="view-expenses" class="view"></div>
   <div id="view-balances" class="view active"></div>
+  <div id="view-itinerary" class="view">
+    <div class="itin-root">
+
+      <!-- Hero -->
+      <div class="itin-hero">
+        <div class="itin-hero-orb"></div>
+        <div class="itin-hero-eyebrow">Aug 15–27, 2026 · 12 Nights</div>
+        <h1 class="itin-hero-title">Japan<span class="itin-hero-year"><br>2026</span></h1>
+        <div class="itin-hero-rule"></div>
+        <div class="itin-hero-sub">Tokyo · Gotemba · Hakone · Fuji</div>
+        <div class="itin-hero-people">
+          <span class="itin-hero-person">France</span>
+          <span class="itin-hero-person">Shuan</span>
+          <span class="itin-hero-person">Alvin</span>
+          <span class="itin-hero-person">Steven</span>
+          <span class="itin-hero-person">James</span>
+        </div>
+      </div>
+
+      <!-- Phase filter -->
+      <div class="itin-phase-nav">
+        <button class="itin-phase-btn active" onclick="filterItinPhase('all')">All Days</button>
+        <button class="itin-phase-btn" onclick="filterItinPhase('1')">Phase 1 · Tokyo</button>
+        <button class="itin-phase-btn" onclick="filterItinPhase('2')">Phase 2 · Fuji</button>
+        <button class="itin-phase-btn" onclick="filterItinPhase('3')">Phase 3 · Tokyo</button>
+      </div>
+
+      <!-- ── PHASE 1 ─────────────────────────────────── -->
+      <div class="itin-phase-header" data-phase="1">
+        <div class="itin-phase-header-inner">
+          <div class="itin-phase-num">01</div>
+          <div class="itin-phase-name">
+            <div class="itin-phase-pill p1">Phase 1</div>
+            <div class="itin-phase-title-text">Tokyo Round 1</div>
+            <div class="itin-phase-meta">Aug 15–16 · France · Shuan · Alvin · Steven</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aug 15 -->
+      <div class="itin-day" data-phase="1">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-15">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-15')">
+            <div class="itin-day-date"><span class="itin-day-dow">SAT</span><span class="itin-day-num-lbl">15</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Arrival</div>
+              <div class="itin-day-sub">NRT → Ikebukuro → Sugamo · Creative Terrace UNBOUND</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>JL 57 · SFO → NRT · Land ~4:30 PM JST · NRT T2</strong><p>Buy Suica IC cards at airport. N'EX → Ikebukuro (~85 min, ¥3,070) → Yamanote Line to Sugamo (2 stops, 4 min). Pre-book N'EX reserved seats before departure.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Check in · Creative Terrace UNBOUND<span class="itin-badge-book">Booked</span></strong><p>5-chōme-45-8 Sugamo, Toshima City · 4 bedrooms, 5 beds, 123㎡ · ★5.0 · 2 stops to Ikebukuro</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Dinner</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Ramen Gojuban — arrival dinner</strong><p>2 km from Airbnb, Ikebukuro area. ramen_beast top 10 2025 — Niigata-style miso ramen, rich and deeply seasoned. Sells out early — if closed, check Tabelog for late-night options near Sugamo/Ikebukuro.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 16 -->
+      <div class="itin-day" data-phase="1">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-16">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-16')">
+            <div class="itin-day-date"><span class="itin-day-dow">SUN</span><span class="itin-day-num-lbl">16</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Tokyo Day 1</div>
+              <div class="itin-day-sub">Harajuku · Asakusa · Shinjuku · Golden Gai</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Meiji Shrine → Harajuku → Omotesando</strong><p>Harajuku Gyozarou for gyoza. KOFFEE MAMEYA (Omotesando — specialty pour-over, no seats, quick stop). Higuma Doughnuts × Coffee Wrights (opens 11 AM, closed Wednesdays).</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Shibuya Scramble → Senso-ji / Asakusa → Nakamise → Akihabara</strong><p>Kibidango Azuma (street snack) + Kamejuu (traditional sweets) in Asakusa.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Omoide Yokocho — yakitori</strong><p>Essential Shinjuku institution. Smoke, skewers, cold Sapporo. Arrive early — narrow alley fills fast. Pack tonight — car pickup tomorrow morning.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Nonbei Yokocho (Shibuya) · Kabukicho wander</strong><p>Lantern-lit alley of tiny yakitori spots, then wander Kabukicho for the neon and chaos.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── PHASE 2 ─────────────────────────────────── -->
+      <div class="itin-phase-header" data-phase="2">
+        <div class="itin-phase-header-inner">
+          <div class="itin-phase-num">02</div>
+          <div class="itin-phase-name">
+            <div class="itin-phase-pill p2">Phase 2</div>
+            <div class="itin-phase-title-text">Gotemba · Fuji · Hakone</div>
+            <div class="itin-phase-meta">Aug 17–20 · France · Shuan · Alvin · Steven</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aug 17 -->
+      <div class="itin-day" data-phase="2">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-17">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-17')">
+            <div class="itin-day-date"><span class="itin-day-dow">MON</span><span class="itin-day-num-lbl">17</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Drive to Gotemba</div>
+              <div class="itin-day-sub">Sixt · Tomei Expressway · Costco Zama</div>
+            </div>
+            <span class="itin-loc drive">Drive</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Pick up car · Sixt Shibuya<span class="itin-badge-book">Booked</span></strong><p>10-4 Udagawacho, Shibuya-ku · Take taxi or ~50 min by train — leave early. Confirm ETC card included. France: IDP required for rental + Fun2Drive. Steven: IDP for Fun2Drive only.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">En Route</span><div class="itin-evt-dot green"></div>
+              <div class="itin-evt-body"><strong>Costco Zama — Zama City, Kanagawa</strong><p>~40 min from Ikebukuro via Tomei Expressway, right off the highway. Opens 10 AM weekdays. Load up on snacks, drinks, and supplies for the Fuji/Hakone stretch.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Check in · 1929 Niihashi, Gotemba<span class="itin-badge-book">Booked</span></strong><p>2 min walk from JR Gotemba Station · on-site gravel driveway parking · 134㎡, 5 bedrooms · ~15 min to Fun2Drive · ~20 min to Fujisan Parking</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Dinner</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Sawayaka — Genkotsu Hamburg Steak</strong><p>Shizuoka-only chain. 100% beef, charcoal-grilled, finished at your table. Get a ticket on arrival, shop outlets while waiting. Monday = no weekend wait.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 18 -->
+      <div class="itin-day" data-phase="2">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-18">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-18')">
+            <div class="itin-day-date"><span class="itin-day-dow">TUE</span><span class="itin-day-num-lbl">18</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Fun2Drive — Ultimate Hakone Drive</div>
+              <div class="itin-day-sub">Hakone Skyline · Ashinoko Skyline · Turnpike</div>
+            </div>
+            <span class="itin-loc drive">Drive</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event hi">
+              <span class="itin-evt-time">All Day</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Fun2Drive "Ultimate Hakone Drive"<span class="itin-badge-book">Booked</span></strong><p>4.5 hrs · ¥59,980/car (insurance, guide fee, tax included; gas + tolls extra). Guided convoy on the Initial D / MF Ghost roads. France: 353605236494063 · Steven: 353605252020361.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Check-In</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Arrive 30–60 min before start · Checklist</strong><p>Cash for remaining balance + tolls (cash only). Credit card for security deposit (remove international restrictions). Original passport + home driver's license + original IDP physical document. France + Steven both need IDP. Membership registration ≥24 hrs before start — do Aug 15 or 16.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Toraya Kobo + Gotemba dinner</strong><p>Toraya Kobo: the only workshop of the 500-year-old confectionery house Toraya. Seasonal wagashi in a bamboo garden. Evening izakaya in Gotemba town.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 19 -->
+      <div class="itin-day" data-phase="2">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-19">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-19')">
+            <div class="itin-day-date"><span class="itin-day-dow">WED</span><span class="itin-day-num-lbl">19</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Mt. Fuji Summit Hike</div>
+              <div class="itin-day-sub">Yoshida Trail · Day Hike · Fujisan Parking → 5th Station</div>
+            </div>
+            <span class="itin-loc fuji">Fuji</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">3:30 AM</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Depart 1929 Niihashi, Gotemba</strong><p>~20 min drive to Fujisan Parking Lot. Depart ~3:30 AM, arrive by 3:45–4:00 AM to queue for first shuttle.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">4:00 AM</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>First shuttle — ¥3,000 round trip (pre-buy via Jorudan)</strong><p>~45 min to 5th Station. First bus fills fast — arrive early to queue.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">4:45 AM</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>5th Station · Gate + ¥4,000/person fee · Gear check</strong><p>Reserve slot at fujisan-climb.jp (opens May/Jun 2026). Proper hiking boots mandatory. Gate closes 2 PM for non-hut guests.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Summit</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>~6 hrs ascent · ~4 hrs descent</strong><p>Headlamps, warm layers (summit ~5°C), snacks, water. Wide margin before 2 PM closure with 4:45 AM start.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Return to 1929 Niihashi · Final night in Gotemba</strong><p>Rest, eat whatever is easy, early night. Checkout tomorrow morning before Hakone.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 20 -->
+      <div class="itin-day" data-phase="2">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-20">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-20')">
+            <div class="itin-day-date"><span class="itin-day-dow">THU</span><span class="itin-day-num-lbl">20</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Hakone Day Trip</div>
+              <div class="itin-day-sub">Open-Air Museum · Owakudani · Lake Ashi · Ropeway</div>
+            </div>
+            <span class="itin-loc hakone">Hakone</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Check out 1929 Niihashi · Optional: Kirin Distillery</strong><p>If doing Kirin (10:30 AM tour, ~15 min from Airbnb): book standard tour (¥500) in advance. Hakone Open-Air Museum is ~25 min from the Airbnb.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">All Day</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Hakone Open-Air Museum → Owakudani → Lake Ashi → Ropeway</strong><p>Onsen tamago (hot spring eggs) at Owakudani — mandatory. Ropeway has Fuji views when weather cooperates. Lake Ashi pirate ship cruise optional.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Drive back to Creative Terrace UNBOUND, Sugamo</strong><p>Dinner in Hakone town before departing. Hakone → Sugamo via Tomei Expressway ~2 hrs. James departs SFO on NH 107 tonight — lands HND tomorrow morning.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── PHASE 3 ─────────────────────────────────── -->
+      <div class="itin-phase-header" data-phase="3">
+        <div class="itin-phase-header-inner">
+          <div class="itin-phase-num">03</div>
+          <div class="itin-phase-name">
+            <div class="itin-phase-pill p3">Phase 3</div>
+            <div class="itin-phase-title-text">Tokyo Round 2</div>
+            <div class="itin-phase-meta">Aug 21–27 · Full group assembled</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aug 21 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-21">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-21')">
+            <div class="itin-day-date"><span class="itin-day-dow">FRI</span><span class="itin-day-num-lbl">21</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Return to Tokyo · James Arrives</div>
+              <div class="itin-day-sub">Full group assembled · Shinjuku · Recovery</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Morning coffee + breakfast near Airbnb</strong><p>Sugamo Jizo-dori shopping street has local cafes and bakeries worth exploring on foot before James arrives.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>James arrives HND · NH 107 from SFO</strong><p>Keikyu Line → Shinagawa → Yamanote → Sugamo · ~55 min · ¥660. Send address + entry code in advance.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Dinner</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Rāmenya Shima — first dinner as a full group</strong><p>Highest-rated ramen in Tokyo on Tabelog, Shinjuku area. No reservation needed.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Nonbei Yokocho (Shibuya) or Kabukicho wander</strong><p>Nonbei Yokocho: Shibuya's lantern-lit alley of tiny yakitori spots. Or just wander Kabukicho. Light night.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 22 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-22">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-22')">
+            <div class="itin-day-date"><span class="itin-day-dow">SAT</span><span class="itin-day-num-lbl">22</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Daikanyama · Nakameguro · Sushisho Masa</div>
+              <div class="itin-day-sub">Light day · 9 PM omakase anchor</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Kapital Daikanyama cluster</strong><p>Kapital Daikanyama + duffle with kapital + Kapital Legs — all on the same block. Best concentration of Kapital in Tokyo.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Onibus Coffee Nakameguro · Canal walk</strong><p>Consistently ranked best coffee in Nakameguro, canal-side, hand-drip single-origin. Walk the canal north toward Daikanyama and back. Free afternoon — rest before tonight.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">9:00 PM</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Sushisho Masa — Minami-Aoyama<span class="itin-badge-book">Booked · 5 people</span></strong><p>High-end omakase, dinner service only. Closed Mondays. Minami-Aoyama — 15 min taxi from Nakameguro. Book via pocket-concierge.jp/en/restaurants/244036.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 23 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-23">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-23')">
+            <div class="itin-day-date"><span class="itin-day-dow">SUN</span><span class="itin-day-num-lbl">23</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Ginza · Azabu · Roppongi</div>
+              <div class="itin-day-sub">Coffee · Shopping · Evening reservation</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Cafe de l'ambre → Ginza Kagari → Centre The Bakery</strong><p>Cafe de l'ambre: legendary kissaten since 1948, aged single-origin beans, coffee only. Ginza Kagari: Michelin-recognized chicken paitan ramen, arrive early. Centre The Bakery: acclaimed toast specialist.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Kapital Ginza · CASANOVA Vintage · KAPITAL Legs Roppongi · Tokyo Tower Pickleball (optional)</strong><p>Tokyo Tower Pickleball Friendship — rooftop courts at Tokyo Tower FootTown. Court rental by time slot, paddles + balls free to borrow. Book via reserva.be/tokyotowerpickleball.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Pick one evening anchor:</strong><p><strong>A · Kotaro</strong><span class="itin-badge-res">Reserve</span> — best premium izakaya in Tokyo, call daily 1 PM JST (30-day window)<br><strong>B · Komiyama-nishiazabu</strong><span class="itin-badge-res">Reserve</span> — Omi wagyu omakase, counter seats<br><strong>C · SAVOY Azabujuban</strong> — legendary Neapolitan pizza, two types only, no reservation, arrive early</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 24 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-24">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-24')">
+            <div class="itin-day-date"><span class="itin-day-dow">MON</span><span class="itin-day-num-lbl">24</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">East Corridor</div>
+              <div class="itin-day-sub">Toyosu · Asakusa · Kappabashi · Ueno · Akihabara</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event hi">
+              <span class="itin-evt-time">5:00 AM</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Sushi Dai — Toyosu · Bib Gourmand · Cash only</strong><p>Queue by 4:15 AM. ~¥5,500 omakase, sourced directly from Toyosu. Aug 24 is Monday — open ✓. Closed Sundays and most Wednesdays.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Tsukiji Outer Market → Kappabashi → Kama-Asa Knives</strong><p>Tsukiji: 10 min subway from Toyosu. Post-sushi wander — tamagoyaki, seafood skewers. Kama-Asa: founded 1908, 1,000+ knives, English staff. Bring passport for tax-free.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Ueno — HINOYA · AMERICAYA · Tensuzu · Gyukatsu Motomura</strong><p>HINOYA/AMERICAYA: vintage workwear, same block. Tensuzu: Bib Gourmand tempura, founded 1928, no reservation. Gyukatsu Motomura: beef katsu cooked rare, hot stone at table — ~¥1,500.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Unagi Hashimoto — Ueno/Akihabara area</strong><p>Freshwater eel, Michelin-listed. Counter seating, full view of Edo-style preparation.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Active Akiba Batting Cage Centre</strong><p>Akihabara — multiple cage types, late night.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 25 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-25">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-25')">
+            <div class="itin-day-date"><span class="itin-day-dow">TUE</span><span class="itin-day-num-lbl">25</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">West Arc</div>
+              <div class="itin-day-sub">Shimokitazawa · Hatagaya · Omotesando · Nakano · Private Wagyu</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Shimokitazawa — Coffee + Vintage + Ramen</strong><p>Ogawa Coffee Laboratory (best in Shimokita). reload + Bears ベアーズ + Re:Re: Garden — all walkable vintage cluster. Sousakumen Hitosuji: ramen_beast #1 in Japan 2025, mala-style broth, in-house noodles.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Blue Lug Hatagaya · NUIR · Whistler (Nakano) · Higuma Doughnuts + KOFFEE MAMEYA</strong><p>Blue Lug: best custom bike shop in Tokyo. Whistler: Nakano workwear/vintage. Higuma Doughnuts: Aug 25 is Tuesday ✓ (closed Wednesdays).</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Wagyu Yakiniku Tobiuishi Iidabashi<span class="itin-badge-res">Reserve via Tabelog</span></strong><p>Private room wagyu yakiniku — all seats are completely private rooms, wagyu sourced from Shibaura Market. ¥8,000–9,000/person. Perfect for 5. Iidabashi: 15 min east from Omotesando on Sobu Line.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Round One Ikebukuro</strong><p>Arcade, bowling, billiards, batting — massive complex, open late.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 26 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-26">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-26')">
+            <div class="itin-day-date"><span class="itin-day-dow">WED</span><span class="itin-day-num-lbl">26</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Last Day</div>
+              <div class="itin-day-sub">Ramen · Overflow · Final dinner · Nonbei Yokocho</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Ramen Gojuban · or overflow from earlier in the trip</strong><p>Gojuban: ramen_beast top 10 2025, 2 km from Airbnb — the one to go back to on the last day. Tonkatsu Narikura (omakase.in/en/r/qw473765) or Sushi Keita (omakase.in/en/r/ip613855) if not yet done.</p></div>
+            </div>
+            <div class="itin-event hi">
+              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot gold"></div>
+              <div class="itin-evt-body"><strong>Pick one anchor:</strong><p><strong>A · Sushi Keita</strong><span class="itin-badge-res">omakase.in</span> — 1 Michelin star<br><strong>B · Tonkatsu Narikura</strong><span class="itin-badge-res">omakase.in</span> — best tonkatsu in Tokyo, heritage pork<br><strong>C · Ginza Hachigou</strong><span class="itin-badge-res">TableCheck</span> — former Michelin star ramen, 60 bowls/day, Saturdays 9 AM JST</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Final dinner — Omoide Yokocho for one last round</strong><p>Full circle back to night one. Same smoke, same skewers.</p></div>
+            </div>
+            <div class="itin-event">
+              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>Nonbei Yokocho (Shibuya) or early night</strong><p>Low-key send-off. Pack for HND — Keikyu Line departs early tomorrow.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Aug 27 -->
+      <div class="itin-day" data-phase="3">
+        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-27">
+          <div class="itin-day-hdr" onclick="toggleItinDay('iday-27')">
+            <div class="itin-day-date"><span class="itin-day-dow">THU</span><span class="itin-day-num-lbl">27</span></div>
+            <div class="itin-day-info">
+              <div class="itin-day-title">Departure</div>
+              <div class="itin-day-sub">Tokyo → HND Terminal 3 → SFO</div>
+            </div>
+            <span class="itin-loc tokyo">Tokyo</span>
+            <span class="itin-chevron">▾</span>
+          </div>
+          <div class="itin-events">
+            <div class="itin-event">
+              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
+              <div class="itin-evt-body"><strong>UA 876 · HND T3 → SFO · Departs 3:50 PM JST · Arrives 9:35 AM PDT (same day)</strong><p>Sugamo → Shinagawa (Yamanote) → Keikyu Line → HND T3 · ~55 min · ¥880. At HND by 1:15 PM at the latest. Allow 2.5 hrs before departure for international check-in.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+    </div><!-- .itin-root -->
+  </div><!-- #view-itinerary -->
 </main>
 
 <div id="modal-overlay">
@@ -783,6 +1523,72 @@ async function fetchData() {
 // Initial load + auto-refresh every 60 minutes
 fetchData();
 setInterval(fetchData, 60 * 60 * 1000);
+
+// ===== ITINERARY =====
+let itinObserver = null;
+let itinInitialized = false;
+
+function toggleItinDay(id) {
+  const inner = document.getElementById(id);
+  if (!inner) return;
+  inner.classList.toggle('open');
+}
+
+function filterItinPhase(phase) {
+  // Update active button
+  document.querySelectorAll('.itin-phase-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.itin-phase-btn').forEach(btn => {
+    const target = btn.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    if (target === phase) btn.classList.add('active');
+  });
+
+  // Show/hide days and phase headers
+  document.querySelectorAll('.itin-day').forEach(el => {
+    if (phase === 'all' || el.dataset.phase === phase) {
+      el.classList.remove('hidden');
+    } else {
+      el.classList.add('hidden');
+    }
+  });
+  document.querySelectorAll('.itin-phase-header').forEach(el => {
+    if (phase === 'all' || el.dataset.phase === phase) {
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  // Re-trigger scroll reveals for newly visible items
+  if (itinObserver) {
+    document.querySelectorAll('.itin-day:not(.hidden):not(.revealed)').forEach(el => itinObserver.observe(el));
+  }
+}
+
+function initItinerary() {
+  if (itinInitialized) return;
+  itinInitialized = true;
+
+  // IntersectionObserver scroll reveals
+  itinObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        // Stagger sibling reveals
+        const siblings = Array.from(document.querySelectorAll('.itin-day:not(.hidden)'));
+        const idx = siblings.indexOf(el);
+        setTimeout(() => el.classList.add('revealed'), (idx % 4) * 60);
+        itinObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.itin-day').forEach(el => itinObserver.observe(el));
+}
+
+// Hook into nav clicks to init itinerary on first visit
+document.querySelectorAll('nav a[data-view="itinerary"]').forEach(link => {
+  link.addEventListener('click', () => setTimeout(initItinerary, 50), { once: true });
+});
 </script>
 </body>
 </html>
