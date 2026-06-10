@@ -302,8 +302,8 @@
       font-weight: 700; margin-bottom: 8px;
     }
     .itin-phase-pill.p1 { background: rgba(200,169,122,0.1); color: var(--accent); border: 1px solid rgba(200,169,122,0.2); }
-    .itin-phase-pill.p2 { background: rgba(122,184,122,0.1); color: var(--green); border: 1px solid rgba(122,184,122,0.2); }
-    .itin-phase-pill.p3 { background: rgba(148,120,210,0.1); color: #a07ed0; border: 1px solid rgba(148,120,210,0.2); }
+    .itin-phase-pill.p2 { background: rgba(188,80,74,0.1); color: #c05550; border: 1px solid rgba(188,80,74,0.2); }
+    .itin-phase-pill.p3 { background: rgba(80,180,140,0.1); color: #50b48c; border: 1px solid rgba(80,180,140,0.2); }
     .itin-phase-title-text {
       font-size: 20px; font-weight: 700; color: var(--text);
       letter-spacing: -0.02em; line-height: 1;
@@ -391,8 +391,8 @@
       padding: 4px 10px; border-radius: 100px; font-size: 9px;
       letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; flex-shrink: 0;
     }
-    .itin-loc.tokyo  { background: rgba(112,144,208,0.1); color: #7090d0; border: 1px solid rgba(112,144,208,0.18); }
-    .itin-loc.drive  { background: rgba(96,176,112,0.1);  color: #60b070; border: 1px solid rgba(96,176,112,0.18); }
+    .itin-loc.tokyo  { background: rgba(200,169,122,0.1); color: #c8a97a; border: 1px solid rgba(200,169,122,0.2); }
+    .itin-loc.drive  { background: rgba(188,80,74,0.1);   color: #c05550; border: 1px solid rgba(188,80,74,0.2); }
     .itin-loc.fuji   { background: rgba(192,112,112,0.1); color: #c07070; border: 1px solid rgba(192,112,112,0.18); }
     .itin-loc.hakone { background: rgba(144,112,192,0.1); color: #9070c0; border: 1px solid rgba(144,112,192,0.18); }
 
@@ -576,7 +576,7 @@
             <div class="itin-day-date"><span class="itin-day-dow">SUN</span><span class="itin-day-num-lbl">16</span></div>
             <div class="itin-day-info">
               <div class="itin-day-title">Tokyo Day 1</div>
-              <div class="itin-day-sub">Harajuku · Asakusa · Shinjuku · Golden Gai</div>
+              <div class="itin-day-sub">Harajuku · Asakusa · Shinjuku</div>
             </div>
             <span class="itin-loc tokyo">Tokyo</span>
             <span class="itin-chevron">▾</span>
@@ -592,11 +592,7 @@
             </div>
             <div class="itin-event hi">
               <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Omoide Yokocho — yakitori</strong><p>Essential Shinjuku institution. Smoke, skewers, cold Sapporo. Arrive early — narrow alley fills fast. Pack tonight — car pickup tomorrow morning.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Nonbei Yokocho (Shibuya) · Kabukicho wander</strong><p>Lantern-lit alley of tiny yakitori spots, then wander Kabukicho for the neon and chaos.</p></div>
+              <div class="itin-evt-body"><strong>Sushi Keita</strong><p><a href="https://tabelog.com/en/tokyo/A1313/A131301/13213360/" style="color: gray;">https://tabelog.com/en/tokyo/A1313/A131301/13213360/</a></p></div>
             </div>
           </div>
         </div></div>
@@ -754,220 +750,618 @@
         </div>
       </div>
 
-      <!-- Aug 21 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-21">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-21')">
-            <div class="itin-day-date"><span class="itin-day-dow">FRI</span><span class="itin-day-num-lbl">21</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">Return to Tokyo · James Arrives</div>
-              <div class="itin-day-sub">Full group assembled · Shinjuku · Recovery</div>
+      <style>
+        /* ── Phase 3 card system ─────────────────────── */
+        .p3-day {
+          margin-bottom: 8px;
+          opacity: 0; transform: translateY(18px); filter: blur(4px);
+          transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1),
+                      transform 0.7s cubic-bezier(0.32,0.72,0,1),
+                      filter 0.7s cubic-bezier(0.32,0.72,0,1);
+        }
+        .p3-day.revealed { opacity: 1; transform: none; filter: none; }
+        .p3-day.hidden { display: none; }
+
+        .p3-card {
+          background: #181818;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        /* Header strip */
+        .p3-hdr {
+          display: flex; align-items: center; gap: 0;
+          cursor: pointer; user-select: none;
+          border-bottom: 1px solid rgba(255,255,255,0.055);
+          transition: background 0.2s;
+        }
+        .p3-hdr:hover { background: rgba(255,255,255,0.025); }
+
+        .p3-date-block {
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          width: 64px; flex-shrink: 0; padding: 14px 0;
+          border-right: 1px solid rgba(255,255,255,0.07);
+        }
+        .p3-dow { font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .p3-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--text); line-height: 1; }
+
+        .p3-hdr-text { flex: 1; padding: 14px 16px; min-width: 0; }
+        .p3-day-name { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.2; }
+        .p3-day-zone { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+
+        .p3-chevron {
+          width: 28px; height: 28px; margin-right: 14px; flex-shrink: 0;
+          border-radius: 50%; border: 1px solid rgba(255,255,255,0.09);
+          background: rgba(255,255,255,0.03);
+          display: flex; align-items: center; justify-content: center;
+          color: var(--text-muted); font-size: 11px;
+          transition: transform 0.45s cubic-bezier(0.32,0.72,0,1), background 0.25s, border-color 0.25s, color 0.25s;
+        }
+        .p3-open .p3-chevron {
+          transform: rotate(180deg);
+          border-color: rgba(80,180,140,0.3);
+          background: rgba(80,180,140,0.08);
+          color: #50b48c;
+        }
+
+        /* Anchor strip — pinned events at top */
+        .p3-anchors {
+          display: flex; flex-wrap: wrap; gap: 6px;
+          padding: 10px 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          background: rgba(80,180,140,0.04);
+        }
+        .p3-anchor-item {
+          display: flex; align-items: center; gap: 7px;
+          background: rgba(80,180,140,0.09);
+          border: 1px solid rgba(80,180,140,0.2);
+          border-radius: 8px;
+          padding: 6px 10px;
+        }
+        .p3-anchor-dot {
+          width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+          background: #50b48c;
+          box-shadow: 0 0 0 2px rgba(80,180,140,0.2);
+        }
+        .p3-anchor-name { font-size: 11px; font-weight: 600; color: #7dd4b0; }
+        .p3-anchor-meta { font-size: 10px; color: rgba(80,180,140,0.6); margin-top: 1px; }
+        .p3-anchor-badge {
+          font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+          padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
+        }
+        .p3-anchor-badge.booked { background: rgba(122,184,122,0.15); color: var(--green); border: 1px solid rgba(122,184,122,0.25); }
+        .p3-anchor-badge.res    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
+        .p3-anchor-badge.warn   { background: rgba(200,169,122,0.12); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
+        .p3-anchor-badge.early  { background: rgba(112,144,208,0.12); color: #7090d0;      border: 1px solid rgba(112,144,208,0.22); }
+
+        /* Collapsible body */
+        .p3-body {
+          max-height: 0; overflow: hidden;
+          transition: max-height 0.6s cubic-bezier(0.32,0.72,0,1);
+        }
+        .p3-open .p3-body { max-height: 4000px; }
+
+        /* Section blocks inside body */
+        .p3-section {
+          border-bottom: 1px solid rgba(255,255,255,0.04);
+          padding: 14px 16px;
+        }
+        .p3-section:last-child { border-bottom: none; }
+
+        .p3-section-label {
+          font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+          margin-bottom: 10px; padding-bottom: 6px;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .p3-section-label.food  { color: #6baa80; }
+        .p3-section-label.coffee { color: #b89060; }
+        .p3-section-label.shop  { color: #8090c0; }
+        .p3-section-label.act   { color: #c06868; }
+        .p3-section-label.note  { color: var(--text-muted); }
+
+        /* POI grid */
+        .p3-poi-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+          gap: 6px;
+        }
+
+        .p3-poi {
+          background: rgba(255,255,255,0.028);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 8px;
+          padding: 8px 10px;
+          transition: background 0.18s, border-color 0.18s;
+        }
+        .p3-poi:hover {
+          background: rgba(255,255,255,0.05);
+          border-color: rgba(255,255,255,0.1);
+        }
+        .p3-poi-name {
+          font-size: 11.5px; font-weight: 600; color: var(--text);
+          line-height: 1.3; margin-bottom: 3px;
+        }
+        .p3-poi-desc {
+          font-size: 10px; color: var(--text-muted); line-height: 1.5;
+        }
+        .p3-poi-badge {
+          display: inline-block; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+          font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
+        }
+        .p3-poi-badge.res    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
+        .p3-poi-badge.warn   { background: rgba(200,169,122,0.12); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
+
+        /* Subzone label within a section */
+        .p3-subzone {
+          font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+          color: var(--text-muted); margin: 10px 0 6px;
+        }
+        .p3-subzone:first-child { margin-top: 0; }
+
+        /* Flow note */
+        .p3-note {
+          font-size: 10.5px; color: var(--text-muted); line-height: 1.65;
+          background: rgba(255,255,255,0.02);
+          border-left: 2px solid rgba(80,180,140,0.25);
+          padding: 8px 12px;
+          border-radius: 0 6px 6px 0;
+        }
+        .p3-note strong { color: var(--text-secondary); font-weight: 600; }
+
+        /* Departure card */
+        .p3-depart {
+          background: #181818;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          padding: 16px 20px;
+          display: flex; align-items: center; gap: 16px;
+        }
+        .p3-depart-date {
+          display: flex; flex-direction: column; align-items: center;
+          width: 52px; flex-shrink: 0;
+          padding: 8px; border-radius: 8px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.07);
+        }
+        .p3-depart-dow { font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .p3-depart-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; }
+        .p3-depart-info { flex: 1; }
+        .p3-depart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .p3-depart-detail { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+        @media (max-width: 600px) {
+          .p3-poi-grid { grid-template-columns: 1fr 1fr; }
+          .p3-date-block { width: 52px; }
+          .p3-num { font-size: 24px; }
+        }
+      </style>
+
+      <!-- ── Aug 21 — Assembly ─────────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-card" id="p3-21">
+          <div class="p3-hdr" onclick="toggleP3('p3-21')">
+            <div class="p3-date-block"><span class="p3-dow">Fri</span><span class="p3-num">21</span></div>
+            <div class="p3-hdr-text">
+              <div class="p3-day-name">Assembly — James Arrives</div>
+              <div class="p3-day-zone">Sugamo · Ikebukuro · Home base · Recovery</div>
             </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+            <div class="p3-chevron">▾</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Morning coffee + breakfast near Airbnb</strong><p>Sugamo Jizo-dori shopping street has local cafes and bakeries worth exploring on foot before James arrives.</p></div>
+          <div class="p3-anchors">
+            <div class="p3-anchor-item">
+              <div class="p3-anchor-dot"></div>
+              <div><div class="p3-anchor-name">James arrives HND · NH 107</div><div class="p3-anchor-meta">Keikyu → Shinagawa → Yamanote → Sugamo · ~55 min · ¥660</div></div>
             </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>James arrives HND · NH 107 from SFO</strong><p>Keikyu Line → Shinagawa → Yamanote → Sugamo · ~55 min · ¥660. Send address + entry code in advance.</p></div>
-            </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Dinner</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Rāmenya Shima — first dinner as a full group</strong><p>Highest-rated ramen in Tokyo on Tabelog, Shinjuku area. No reservation needed.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Nonbei Yokocho (Shibuya) or Kabukicho wander</strong><p>Nonbei Yokocho: Shibuya's lantern-lit alley of tiny yakitori spots. Or just wander Kabukicho. Light night.</p></div>
+            <div class="p3-anchor-item">
+              <div class="p3-anchor-dot"></div>
+              <div><div class="p3-anchor-name">Rāmenya Shima — first group dinner</div><div class="p3-anchor-meta">Tabelog top ramen · Shinjuku area · no reservation</div></div>
             </div>
           </div>
-        </div></div>
+          <div class="p3-body">
+            <div class="p3-section">
+              <div class="p3-section-label food">Food &amp; drink — near base</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Ramen Gojuban</div><div class="p3-poi-desc">2 km from Airbnb. ramen_beast top 10, Niigata-style miso. Arrival bowl or last-day repeat.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Tonkatsu Tonta</div><div class="p3-poi-desc">Solid tonkatsu, Ikebukuro area. Fallback if Gojuban is sold out early.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kisaburō Nōjō</div><div class="p3-poi-desc">Egg farm restaurant, Komagome — one stop from Sugamo. Good brunch once James lands.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Iyoshi Cola Honten</div><div class="p3-poi-desc">Craft cola flagship, Shimo-Ochiai. Easy detour from Sugamo base.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Unagi Hashimoto</div><div class="p3-poi-desc">Michelin-listed unagi, Edo-style counter prep. Ueno area — doable for dinner if the group wants to go out.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label act">Activities</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Round One Ikebukuro</div><div class="p3-poi-desc">Arcade, bowling, batting, billiards. Ikebukuro, open late. Good low-stakes group activity.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kabukicho wander</div><div class="p3-poi-desc">Shinjuku nightlife. Light wander — easy to bail when jet lag hits.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-note">Recovery day after Phase 2. Keep it flexible and local — don't push distance. James just flew in from SFO, the rest of you are coming off Fuji and Hakone.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Aug 22 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-22">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-22')">
-            <div class="itin-day-date"><span class="itin-day-dow">SAT</span><span class="itin-day-num-lbl">22</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">Daikanyama · Nakameguro · Sushisho Masa</div>
-              <div class="itin-day-sub">Light day · 9 PM omakase anchor</div>
+      <!-- ── Aug 22 — South Arc ────────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-card" id="p3-22">
+          <div class="p3-hdr" onclick="toggleP3('p3-22')">
+            <div class="p3-date-block"><span class="p3-dow">Sat</span><span class="p3-num">22</span></div>
+            <div class="p3-hdr-text">
+              <div class="p3-day-name">South Arc</div>
+              <div class="p3-day-zone">Daikanyama · Nakameguro · Omotesando · Harajuku · Azabu · Roppongi</div>
             </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+            <div class="p3-chevron">▾</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Kapital Daikanyama cluster</strong><p>Kapital Daikanyama + duffle with kapital + Kapital Legs — all on the same block. Best concentration of Kapital in Tokyo.</p></div>
-            </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Onibus Coffee Nakameguro · Canal walk</strong><p>Consistently ranked best coffee in Nakameguro, canal-side, hand-drip single-origin. Walk the canal north toward Daikanyama and back. Free afternoon — rest before tonight.</p></div>
-            </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">9:00 PM</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Sushisho Masa — Minami-Aoyama<span class="itin-badge-book">Booked · 5 people</span></strong><p>High-end omakase, dinner service only. Closed Mondays. Minami-Aoyama — 15 min taxi from Nakameguro. Book via pocket-concierge.jp/en/restaurants/244036.</p></div>
+          <div class="p3-anchors">
+            <div class="p3-anchor-item">
+              <div class="p3-anchor-dot"></div>
+              <div>
+                <div class="p3-anchor-name">Sushisho Masa — 9:00 PM<span class="p3-anchor-badge booked">Booked · 5 ppl</span></div>
+                <div class="p3-anchor-meta">High-end omakase · Minami-Aoyama · 15 min taxi from Nakameguro</div>
+              </div>
             </div>
           </div>
-        </div></div>
+          <div class="p3-body">
+            <div class="p3-section">
+              <div class="p3-section-label shop">Shopping</div>
+              <div class="p3-subzone">Daikanyama</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Kapital Daikanyama</div><div class="p3-poi-desc">Main store. Best Kapital concentration in Tokyo.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">duffle with kapital</div><div class="p3-poi-desc">Next door to Kapital Daikanyama.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kapital Legs Daikanyama</div><div class="p3-poi-desc">Same block — all three within steps.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Omotesando / Shibuya</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">NUIR</div><div class="p3-poi-desc">Select vintage and contemporary, near Omotesando.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">CASANOVA Vintage Ginza</div><div class="p3-poi-desc">High-grade vintage, Ginza — if swinging east.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Roppongi / Azabu</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">KAPITAL Legs Roppongi</div><div class="p3-poi-desc">Roppongi branch, on the way south toward Azabu-Juban.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label coffee">Coffee</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Onibus Coffee Nakameguro</div><div class="p3-poi-desc">Best coffee in Nakameguro, canal-side, hand-drip single-origin.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Koffee Mameya Omotesando</div><div class="p3-poi-desc">Specialty pour-over, no seats, quick stand-and-drink stop.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Rec Coffee Shibuya East</div><div class="p3-poi-desc">Specialty coffee, east Shibuya. On the way between neighborhoods.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label food">Food</div>
+              <div class="p3-subzone">Harajuku / Daikanyama</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Harajuku Gyozarou</div><div class="p3-poi-desc">Classic gyoza, Harajuku. Reliable and fast lunch.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Henry's Burger Daikanyama</div><div class="p3-poi-desc">Smash burger, same Daikanyama cluster as Kapital.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Wagyumafia Cutlet Sandwich</div><div class="p3-poi-desc">Wagyu katsu sando ¥3,500, Daikanyama.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">DE FRITES STAAN Harajuku</div><div class="p3-poi-desc">Belgian frites, Harajuku — afternoon street snack.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Iyoshi Cola Harajuku</div><div class="p3-poi-desc">Craft cola, Harajuku. Pairs with the frites.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Tamago Gurashi</div><div class="p3-poi-desc">Egg-focused cafe, Harajuku/Omotesando area.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Omotesando / Azabu area</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Aji no Nakamura</div><div class="p3-poi-desc">Old-school ramen, Minami-Aoyama area. Near Sushisho Masa.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Menya Sign</div><div class="p3-poi-desc">Ramen, Hiroo — south edge of the day.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kotaro<span class="p3-poi-badge res">Call 1 PM JST</span></div><div class="p3-poi-desc">Best premium izakaya in Tokyo, Omotesando. 30-day window, call daily.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Komiyama-nishiazabu<span class="p3-poi-badge res">Reserve</span></div><div class="p3-poi-desc">Omi wagyu omakase counter, Nishi-Azabu.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">SAVOY Azabujuban</div><div class="p3-poi-desc">Legendary Neapolitan pizza, 2 types only, no reservation. Good post-Sushisho late stop.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Los Tacos Azules</div><div class="p3-poi-desc">Tacos, Sangenjaya. If you push further south of Azabu.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label act">Activities</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">teamLab Borderless</div><div class="p3-poi-desc">Azabudai Hills — between Roppongi and Azabu-Juban. Timed entry, book in advance.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Tokyo Tower Pickleball</div><div class="p3-poi-desc">Rooftop courts at Tokyo Tower FootTown. Book via reserva.be — afternoon slot before Sushisho.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Nonbei Yokocho</div><div class="p3-poi-desc">Shibuya lantern-lit yakitori alley. Good post-Sushisho nightcap street.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-note"><strong>Flow:</strong> Daikanyama (Kapital cluster, brunch) → Nakameguro canal walk + Onibus → Harajuku/Omotesando (Koffee Mameya, NUIR, street snacks) → drift south toward Roppongi/Azabu (teamLab or pickleball if booked, KAPITAL Legs, Kotaro/SAVOY optional) → taxi to Minami-Aoyama for Sushisho 9 PM.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Aug 23 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-23">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-23')">
-            <div class="itin-day-date"><span class="itin-day-dow">SUN</span><span class="itin-day-num-lbl">23</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">Ginza · Azabu · Roppongi</div>
-              <div class="itin-day-sub">Coffee · Shopping · Evening reservation</div>
+      <!-- ── Aug 23 — Northeast ─────────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-card" id="p3-23">
+          <div class="p3-hdr" onclick="toggleP3('p3-23')">
+            <div class="p3-date-block"><span class="p3-dow">Sun</span><span class="p3-num">23</span></div>
+            <div class="p3-hdr-text">
+              <div class="p3-day-name">Northeast Corridor</div>
+              <div class="p3-day-zone">Kuramae · Asakusa · Kappabashi · Ueno · Akihabara</div>
             </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+            <div class="p3-chevron">▾</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Cafe de l'ambre → Ginza Kagari → Centre The Bakery</strong><p>Cafe de l'ambre: legendary kissaten since 1948, aged single-origin beans, coffee only. Ginza Kagari: Michelin-recognized chicken paitan ramen, arrive early. Centre The Bakery: acclaimed toast specialist.</p></div>
+          <div class="p3-body">
+            <div class="p3-section">
+              <div class="p3-section-label coffee">Coffee &amp; bakeries — morning</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Pelican Café</div><div class="p3-poi-desc">Old-school bakery, Kuramae. Opens early — morning bread before the day starts.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">HATCOFFEE</div><div class="p3-poi-desc">Specialty coffee, Kiyosumi/Kuramae area. Pair these two for a proper start.</div></div>
+              </div>
             </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Kapital Ginza · CASANOVA Vintage · KAPITAL Legs Roppongi · Tokyo Tower Pickleball (optional)</strong><p>Tokyo Tower Pickleball Friendship — rooftop courts at Tokyo Tower FootTown. Court rental by time slot, paddles + balls free to borrow. Book via reserva.be/tokyotowerpickleball.</p></div>
+            <div class="p3-section">
+              <div class="p3-section-label food">Food — Asakusa → Ueno</div>
+              <div class="p3-subzone">Asakusa</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Kibidango Azuma</div><div class="p3-poi-desc">Mochi skewers, Nakamise — quintessential Asakusa street snack.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kamejuu</div><div class="p3-poi-desc">Traditional wagashi sweets shop, Asakusa strip.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Ueno</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Tensuzu</div><div class="p3-poi-desc">Bib Gourmand tempura, founded 1928, no reservation. Strong lunch anchor.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Gyukatsu Motomura</div><div class="p3-poi-desc">Beef katsu cooked rare on a hot stone at the table, ~¥1,500. Ueno.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kanazawa Maimon Sushi</div><div class="p3-poi-desc">Kanazawa-style sushi, Ueno. Lunch alt if tempura is too long a wait.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Evening</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Unagi Hashimoto</div><div class="p3-poi-desc">Michelin-listed unagi, Edo-style counter. Ueno area — solid evening anchor if not done Aug 21.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">The Pizza Bar on 38th</div><div class="p3-poi-desc">Rooftop pizza bar, Nihonbashi — south end of the corridor, good evening choice.</div></div>
+              </div>
             </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Pick one evening anchor:</strong><p><strong>A · Kotaro</strong><span class="itin-badge-res">Reserve</span> — best premium izakaya in Tokyo, call daily 1 PM JST (30-day window)<br><strong>B · Komiyama-nishiazabu</strong><span class="itin-badge-res">Reserve</span> — Omi wagyu omakase, counter seats<br><strong>C · SAVOY Azabujuban</strong> — legendary Neapolitan pizza, two types only, no reservation, arrive early</p></div>
+            <div class="p3-section">
+              <div class="p3-section-label shop">Shopping</div>
+              <div class="p3-subzone">Kappabashi</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Kama-Asa Knives<span class="p3-poi-badge warn">Check Sun hrs</span></div><div class="p3-poi-desc">Founded 1908, 1,000+ knives, English staff. Bring passport for tax-free.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Ueno</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">HINOYA</div><div class="p3-poi-desc">Vintage workwear, Ueno. Heavy denim, chore coats, western.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">AMERICAYA</div><div class="p3-poi-desc">Same block as HINOYA — hit both together.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label act">Activities</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Active Akiba Batting Center</div><div class="p3-poi-desc">Multiple cage types, late night. Akihabara — add an Akiba wander after dark.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-note"><strong>Flow:</strong> Kuramae (Pelican + HATCOFFEE) → Asakusa (Nakamise, street snacks) → Kappabashi (Kama-Asa) → Ueno (HINOYA/AMERICAYA, lunch) → Akihabara (batting cages, night wander). All walkable or one stop on the Ginza/Asakusa Line from Sugamo.</div>
             </div>
           </div>
-        </div></div>
+        </div>
       </div>
 
-      <!-- Aug 24 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-24">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-24')">
-            <div class="itin-day-date"><span class="itin-day-dow">MON</span><span class="itin-day-num-lbl">24</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">East Corridor</div>
-              <div class="itin-day-sub">Toyosu · Asakusa · Kappabashi · Ueno · Akihabara</div>
+      <!-- ── Aug 24 — East-South ───────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-card" id="p3-24">
+          <div class="p3-hdr" onclick="toggleP3('p3-24')">
+            <div class="p3-date-block"><span class="p3-dow">Mon</span><span class="p3-num">24</span></div>
+            <div class="p3-hdr-text">
+              <div class="p3-day-name">East-South Corridor</div>
+              <div class="p3-day-zone">Toyosu · Tsukiji · Ginza · Nihonbashi · Iidabashi</div>
             </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+            <div class="p3-chevron">▾</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event hi">
-              <span class="itin-evt-time">5:00 AM</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Sushi Dai — Toyosu · Bib Gourmand · Cash only</strong><p>Queue by 4:15 AM. ~¥5,500 omakase, sourced directly from Toyosu. Aug 24 is Monday — open ✓. Closed Sundays and most Wednesdays.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Tsukiji Outer Market → Kappabashi → Kama-Asa Knives</strong><p>Tsukiji: 10 min subway from Toyosu. Post-sushi wander — tamagoyaki, seafood skewers. Kama-Asa: founded 1908, 1,000+ knives, English staff. Bring passport for tax-free.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Ueno — HINOYA · AMERICAYA · Tensuzu · Gyukatsu Motomura</strong><p>HINOYA/AMERICAYA: vintage workwear, same block. Tensuzu: Bib Gourmand tempura, founded 1928, no reservation. Gyukatsu Motomura: beef katsu cooked rare, hot stone at table — ~¥1,500.</p></div>
-            </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Unagi Hashimoto — Ueno/Akihabara area</strong><p>Freshwater eel, Michelin-listed. Counter seating, full view of Edo-style preparation.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Active Akiba Batting Cage Centre</strong><p>Akihabara — multiple cage types, late night.</p></div>
+          <div class="p3-anchors">
+            <div class="p3-anchor-item">
+              <div class="p3-anchor-dot"></div>
+              <div>
+                <div class="p3-anchor-name">Sushi Dai — Toyosu<span class="p3-anchor-badge early">Queue 4:15 AM</span></div>
+                <div class="p3-anchor-meta">Bib Gourmand omakase · ~¥5,500 · cash only · Open Monday ✓ · closed Sun/Wed</div>
+              </div>
             </div>
           </div>
-        </div></div>
+          <div class="p3-body">
+            <div class="p3-section">
+              <div class="p3-section-label food">Food — post-Sushi Dai morning</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Tsukiji Outer Market</div><div class="p3-poi-desc">10-min subway from Toyosu. Post-sushi wander — tamagoyaki, seafood skewers, tamago sandos.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Centre The Bakery</div><div class="p3-poi-desc">Acclaimed toast specialist, Ginza. Good second breakfast after Tsukiji.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label coffee">Coffee — Ginza</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Cafe de l'ambre</div><div class="p3-poi-desc">Legendary kissaten since 1948, aged single-origin beans. Coffee only, Ginza institution.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Glitch Coffee Ginza</div><div class="p3-poi-desc">Specialty coffee roaster, Ginza.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">BONGENCOFFEE Ginza</div><div class="p3-poi-desc">Specialty coffee, Ginza.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label food">Food — Ginza / Nihonbashi afternoon</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Ginza Kagari</div><div class="p3-poi-desc">Michelin chicken paitan ramen, arrive early for lunch queue.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Miko Sushi Ginza</div><div class="p3-poi-desc">Ginza sushi, lunchtime option.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Wabi Sabi DX</div><div class="p3-poi-desc">Japanese fusion, Ginza/Tsukiji edge.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Parlor Vinefru shave ice</div><div class="p3-poi-desc">Shaved ice, Ginza. August heat — midday cooldown.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">The Pizza Bar on 38th</div><div class="p3-poi-desc">Rooftop pizza bar, Nihonbashi. Evening option if not done Aug 23.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">400°C Pizza Tokyo</div><div class="p3-poi-desc">Neapolitan pizza, Iidabashi/Kudanshita area.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label shop">Shopping — Ginza</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Kapital Ginza</div><div class="p3-poi-desc">Ginza flagship — if skipped on the 22nd.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">CASANOVA Vintage Ginza</div><div class="p3-poi-desc">High-grade vintage, right by the coffee cluster.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label act">Activities &amp; evening picks</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Tokyo Tower Pickleball</div><div class="p3-poi-desc">Rooftop courts at Tokyo Tower FootTown, ~2.7 km from Ginza. Book via reserva.be. Early start = afternoon energy.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">teamLab Borderless</div><div class="p3-poi-desc">Azabudai Hills, ~3.9 km from Ginza. Timed entry, book in advance. If not done Aug 22.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Sushi Keita<span class="p3-poi-badge res">omakase.in</span></div><div class="p3-poi-desc">1 Michelin star, Higashi-Ginza. Evening anchor if not booked for Aug 16.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Wagyu Tobiuishi Iidabashi<span class="p3-poi-badge res">Tabelog</span></div><div class="p3-poi-desc">All-private-room wagyu yakiniku, ¥8–9k/person. Iidabashi — short ride from Ginza.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-note"><strong>Flow:</strong> 4:15 AM Toyosu queue → Sushi Dai done ~8 AM → Tsukiji wander → Ginza corridor at leisure (coffee, shopping, shaved ice, lunch queue) → afternoon activities or nap → evening anchor. Early start earns a built-in rest window.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Aug 25 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-25">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-25')">
-            <div class="itin-day-date"><span class="itin-day-dow">TUE</span><span class="itin-day-num-lbl">25</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">West Arc</div>
-              <div class="itin-day-sub">Shimokitazawa · Hatagaya · Omotesando · Nakano · Private Wagyu</div>
+      <!-- ── Aug 25 — West Arc ──────────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-card" id="p3-25">
+          <div class="p3-hdr" onclick="toggleP3('p3-25')">
+            <div class="p3-date-block"><span class="p3-dow">Tue</span><span class="p3-num">25</span></div>
+            <div class="p3-hdr-text">
+              <div class="p3-day-name">West Arc</div>
+              <div class="p3-day-zone">Koenji · Nishi-Ogikubo · Nakano · Shimokitazawa · Hatagaya · Sangenjaya</div>
             </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+            <div class="p3-chevron">▾</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Shimokitazawa — Coffee + Vintage + Ramen</strong><p>Ogawa Coffee Laboratory (best in Shimokita). reload + Bears ベアーズ + Re:Re: Garden — all walkable vintage cluster. Sousakumen Hitosuji: ramen_beast #1 in Japan 2025, mala-style broth, in-house noodles.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Blue Lug Hatagaya · NUIR · Whistler (Nakano) · Higuma Doughnuts + KOFFEE MAMEYA</strong><p>Blue Lug: best custom bike shop in Tokyo. Whistler: Nakano workwear/vintage. Higuma Doughnuts: Aug 25 is Tuesday ✓ (closed Wednesdays).</p></div>
-            </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Wagyu Yakiniku Tobiuishi Iidabashi<span class="itin-badge-res">Reserve via Tabelog</span></strong><p>Private room wagyu yakiniku — all seats are completely private rooms, wagyu sourced from Shibaura Market. ¥8,000–9,000/person. Perfect for 5. Iidabashi: 15 min east from Omotesando on Sobu Line.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Round One Ikebukuro</strong><p>Arcade, bowling, billiards, batting — massive complex, open late.</p></div>
+          <div class="p3-anchors">
+            <div class="p3-anchor-item">
+              <div class="p3-anchor-dot"></div>
+              <div>
+                <div class="p3-anchor-name">Tonkatsu Narikura — Sangenjaya<span class="p3-anchor-badge res">omakase.in</span></div>
+                <div class="p3-anchor-meta">Heritage pork omakase tonkatsu · evening anchor · 15-min bus south of Shimokitazawa</div>
+              </div>
             </div>
           </div>
-        </div></div>
+          <div class="p3-body">
+            <div class="p3-section">
+              <div class="p3-section-label food">Food &amp; coffee — JR Chuo corridor (morning)</div>
+              <div class="p3-subzone">Koenji</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">European Curry Tomato</div><div class="p3-poi-desc">European-style curry, Koenji/Nakano area. Morning fuel before the vintage walk.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Nishi-Ogikubo — 1 stop west</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">A Tes Souhaits</div><div class="p3-poi-desc">One of the best French patisseries in all of Tokyo. Don't skip this one.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label shop">Shopping — Chuo line + Shimokita</div>
+              <div class="p3-subzone">Koenji</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Koenji vintage strip</div><div class="p3-poi-desc">Tokyo's densest pure-vintage neighborhood. Pal and Look shotengais — budget an hour with no specific targets.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Nakano — 1 stop east</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Whistler</div><div class="p3-poi-desc">Workwear and vintage, Nakano. Easy add before heading south to Shimokita.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Shimokitazawa</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">reload</div><div class="p3-poi-desc">Multi-vendor vintage container mall, Shimokitazawa.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Bears ベアーズ</div><div class="p3-poi-desc">Vintage, a few blocks from reload.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Re:Re: Garden</div><div class="p3-poi-desc">Vintage, walkable from the other two.</div></div>
+              </div>
+              <div class="p3-subzone" style="margin-top:10px;">Hatagaya — 10-min walk from Shimokita</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Blue Lug Hatagaya</div><div class="p3-poi-desc">Best custom bike shop in Tokyo. Worth the detour even just to look.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label coffee">Coffee — Shimokita area</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Ogawa Coffee Laboratory</div><div class="p3-poi-desc">Best coffee in Shimokitazawa. Start the Shimokita block here.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Cafe Viet Arco</div><div class="p3-poi-desc">Vietnamese coffee, Shimokitazawa. Light afternoon stop.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Et Cultural Coffeehouse</div><div class="p3-poi-desc">Independent coffeehouse, walkable from the vintage cluster.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Murrma Coffee</div><div class="p3-poi-desc">Quality coffee, Tomigaya area — eastern edge of the day.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Path</div><div class="p3-poi-desc">Natural wine + food, Tomigaya/Yoyogi. Good wind-down if you push toward Shinjuku.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label food">Food — Shimokita + Sangenjaya</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Sousakumen Hitosuji</div><div class="p3-poi-desc">ramen_beast #1 Japan 2025, mala-style broth, in-house noodles. In Shimokitazawa.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Rāmenya Shima</div><div class="p3-poi-desc">Tabelog top ramen, Shinjuku area. On the way back east if not done Aug 21.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Los Tacos Azules</div><div class="p3-poi-desc">Tacos, Sangenjaya — near Narikura. Pre or post-dinner bite.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-note"><strong>Flow:</strong> JR Chuo from Sugamo → Nakano (Whistler) → Koenji (vintage strip + curry) → Nishi-Ogikubo (A Tes Souhaits) → back to Shinjuku → Odakyu/Keio south to Shimokita (Ogawa Coffee, vintage cluster, Hitosuji ramen) → walk to Hatagaya (Blue Lug) → bus to Sangenjaya for Narikura evening.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Aug 26 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-26">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-26')">
-            <div class="itin-day-date"><span class="itin-day-dow">WED</span><span class="itin-day-num-lbl">26</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">Last Day</div>
-              <div class="itin-day-sub">Ramen · Overflow · Final dinner · Nonbei Yokocho</div>
+      <!-- ── Aug 26 — Last Day ───────────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-card" id="p3-26">
+          <div class="p3-hdr" onclick="toggleP3('p3-26')">
+            <div class="p3-date-block"><span class="p3-dow">Wed</span><span class="p3-num">26</span></div>
+            <div class="p3-hdr-text">
+              <div class="p3-day-name">Last Day — Shinjuku · Ikebukuro · Overflow</div>
+              <div class="p3-day-zone">Ramen send-off · Final dinner · Pack for HND</div>
             </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+            <div class="p3-chevron">▾</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Ramen Gojuban · or overflow from earlier in the trip</strong><p>Gojuban: ramen_beast top 10 2025, 2 km from Airbnb — the one to go back to on the last day. Tonkatsu Narikura (omakase.in/en/r/qw473765) or Sushi Keita (omakase.in/en/r/ip613855) if not yet done.</p></div>
-            </div>
-            <div class="itin-event hi">
-              <span class="itin-evt-time">Afternoon</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Pick one anchor:</strong><p><strong>A · Sushi Keita</strong><span class="itin-badge-res">omakase.in</span> — 1 Michelin star<br><strong>B · Tonkatsu Narikura</strong><span class="itin-badge-res">omakase.in</span> — best tonkatsu in Tokyo, heritage pork<br><strong>C · Ginza Hachigou</strong><span class="itin-badge-res">TableCheck</span> — former Michelin star ramen, 60 bowls/day, Saturdays 9 AM JST</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Final dinner — Omoide Yokocho for one last round</strong><p>Full circle back to night one. Same smoke, same skewers.</p></div>
-            </div>
-            <div class="itin-event">
-              <span class="itin-evt-time">Night</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Nonbei Yokocho (Shibuya) or early night</strong><p>Low-key send-off. Pack for HND — Keikyu Line departs early tomorrow.</p></div>
+          <div class="p3-anchors">
+            <div class="p3-anchor-item">
+              <div class="p3-anchor-dot"></div>
+              <div>
+                <div class="p3-anchor-name">Ramen Gojuban — morning</div>
+                <div class="p3-anchor-meta">2 km from Airbnb · ramen_beast top 10 · Sushi Dai closed Wed ✓ already done Mon</div>
+              </div>
             </div>
           </div>
-        </div></div>
+          <div class="p3-body">
+            <div class="p3-section">
+              <div class="p3-section-label food">Food — Shinjuku / Ikebukuro</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Fūunji</div><div class="p3-poi-desc">Classic tsukemen, Shinjuku. Lunch if Gojuban is the morning move.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Azuki to Kōri</div><div class="p3-poi-desc">Shaved ice + azuki, Shinjuku south. August heat send-off.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">400°C Pizza Tokyo</div><div class="p3-poi-desc">Neapolitan pizza, Iidabashi/Kudanshita. If not done Aug 24.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Tonkatsu Tonta</div><div class="p3-poi-desc">Ikebukuro-area tonkatsu. Overflow if Narikura didn't happen on the 25th.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label food">Final dinner — pick one</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Wagyu Tobiuishi Iidabashi<span class="p3-poi-badge res">Tabelog</span></div><div class="p3-poi-desc">All-private-room wagyu yakiniku, ¥8–9k/person. Best group send-off if not done on the 24th.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Sushi Keita<span class="p3-poi-badge res">omakase.in</span></div><div class="p3-poi-desc">1 Michelin star. Last chance if not yet done.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kotaro<span class="p3-poi-badge res">Call 1 PM JST</span></div><div class="p3-poi-desc">Best premium izakaya in Tokyo, Omotesando. Same-day call.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Komiyama-nishiazabu<span class="p3-poi-badge res">Reserve</span></div><div class="p3-poi-desc">Omi wagyu omakase counter. If Aug 22 didn't land it.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">SAVOY Azabujuban</div><div class="p3-poi-desc">Neapolitan pizza, no reservation. Late, casual. If nothing else is booked.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-section-label act">Night</div>
+              <div class="p3-poi-grid">
+                <div class="p3-poi"><div class="p3-poi-name">Nonbei Yokocho</div><div class="p3-poi-desc">Shibuya lantern-lit yakitori alley. Low-key send-off.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Round One Ikebukuro</div><div class="p3-poi-desc">Arcade, bowling, batting — if the group has one more run in them.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Shinjuku Batting Center</div><div class="p3-poi-desc">Closer option if already in Shinjuku.</div></div>
+                <div class="p3-poi"><div class="p3-poi-name">Kabukicho wander</div><div class="p3-poi-desc">Shinjuku nightlife, one last time.</div></div>
+              </div>
+            </div>
+            <div class="p3-section">
+              <div class="p3-note">Pack tonight. <strong>UA 876 departs HND T3 at 3:50 PM tomorrow.</strong> Sugamo → Shinagawa (Yamanote) → Keikyu → HND T3 · ~55 min · ¥880. At HND by 1:15 PM. Leave Airbnb no later than 12:30 PM.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Aug 27 -->
-      <div class="itin-day" data-phase="3">
-        <div class="itin-day-shell"><div class="itin-day-inner" id="iday-27">
-          <div class="itin-day-hdr" onclick="toggleItinDay('iday-27')">
-            <div class="itin-day-date"><span class="itin-day-dow">THU</span><span class="itin-day-num-lbl">27</span></div>
-            <div class="itin-day-info">
-              <div class="itin-day-title">Departure</div>
-              <div class="itin-day-sub">Tokyo → HND Terminal 3 → SFO</div>
-            </div>
-            <span class="itin-loc tokyo">Tokyo</span>
-            <span class="itin-chevron">▾</span>
+      <!-- ── Aug 27 — Departure ─────────────────── -->
+      <div class="p3-day" data-phase="3">
+        <div class="p3-depart">
+          <div class="p3-depart-date"><span class="p3-depart-dow">Thu</span><span class="p3-depart-num">27</span></div>
+          <div class="p3-depart-info">
+            <div class="p3-depart-title">Departure — UA 876 · HND T3 → SFO</div>
+            <div class="p3-depart-detail">Departs 3:50 PM JST · Arrives 9:35 AM PDT (same day)<br>Sugamo → Shinagawa (Yamanote) → Keikyu Line → HND T3 · ~55 min · ¥880<br>At HND by 1:15 PM at the latest · allow 2.5 hrs · leave Airbnb no later than 12:30 PM</div>
           </div>
-          <div class="itin-events">
-            <div class="itin-event">
-              <span class="itin-evt-time">Morning</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>UA 876 · HND T3 → SFO · Departs 3:50 PM JST · Arrives 9:35 AM PDT (same day)</strong><p>Sugamo → Shinagawa (Yamanote) → Keikyu Line → HND T3 · ~55 min · ¥880. At HND by 1:15 PM at the latest. Allow 2.5 hrs before departure for international check-in.</p></div>
-            </div>
-          </div>
-        </div></div>
+        </div>
       </div>
+
+      <script>
+        function toggleP3(id) {
+          var card = document.getElementById(id);
+          if (card) card.classList.toggle('p3-open');
+        }
+        // Hook P3 days into the existing intersection observer scroll reveal
+        document.addEventListener('DOMContentLoaded', function() {
+          var p3days = document.querySelectorAll('.p3-day');
+          if (window.itinObserver) {
+            p3days.forEach(function(el) { window.itinObserver.observe(el); });
+          } else {
+            // Fallback: reveal immediately after a short delay
+            setTimeout(function() {
+              p3days.forEach(function(el) { el.classList.add('revealed'); });
+            }, 100);
+          }
+        });
+      </script>
 
     </div><!-- .itin-root -->
   </div><!-- #view-itinerary -->
@@ -1542,8 +1936,8 @@ function filterItinPhase(phase) {
     if (target === phase) btn.classList.add('active');
   });
 
-  // Show/hide days and phase headers
-  document.querySelectorAll('.itin-day').forEach(el => {
+  // Show/hide days (both .itin-day and .p3-day) and phase headers
+  document.querySelectorAll('.itin-day, .p3-day').forEach(el => {
     if (phase === 'all' || el.dataset.phase === phase) {
       el.classList.remove('hidden');
     } else {
@@ -1560,7 +1954,7 @@ function filterItinPhase(phase) {
 
   // Re-trigger scroll reveals for newly visible items
   if (itinObserver) {
-    document.querySelectorAll('.itin-day:not(.hidden):not(.revealed)').forEach(el => itinObserver.observe(el));
+    document.querySelectorAll('.itin-day:not(.hidden):not(.revealed), .p3-day:not(.hidden):not(.revealed)').forEach(el => itinObserver.observe(el));
   }
 }
 
@@ -1568,13 +1962,12 @@ function initItinerary() {
   if (itinInitialized) return;
   itinInitialized = true;
 
-  // IntersectionObserver scroll reveals
+  // IntersectionObserver scroll reveals — covers both .itin-day and .p3-day
   itinObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const el = entry.target;
-        // Stagger sibling reveals
-        const siblings = Array.from(document.querySelectorAll('.itin-day:not(.hidden)'));
+        const siblings = Array.from(document.querySelectorAll('.itin-day:not(.hidden), .p3-day:not(.hidden)'));
         const idx = siblings.indexOf(el);
         setTimeout(() => el.classList.add('revealed'), (idx % 4) * 60);
         itinObserver.unobserve(el);
@@ -1582,7 +1975,8 @@ function initItinerary() {
     });
   }, { threshold: 0.08 });
 
-  document.querySelectorAll('.itin-day').forEach(el => itinObserver.observe(el));
+  document.querySelectorAll('.itin-day, .p3-day').forEach(el => itinObserver.observe(el));
+  window.itinObserver = itinObserver;
 }
 
 // Hook into nav clicks to init itinerary on first visit
