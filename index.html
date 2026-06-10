@@ -206,8 +206,9 @@
       #sidebar { width: 100%; flex-direction: row; flex-shrink: 0; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
       #sidebar-title { border-bottom: none; padding: 12px 16px; white-space: nowrap; }
       #sidebar { flex-direction: column; }
-      nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; display: flex; flex-direction: row; background: #161616; border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); overflow-x: visible; }
-      nav a { flex: 1; text-align: center; padding: 14px 8px; border-left: none; border-top: 2px solid transparent; border-bottom: none; white-space: nowrap; }
+      nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; display: flex; flex-direction: row; background: #161616; border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      nav::-webkit-scrollbar { display: none; }
+      nav a { flex: 0 0 auto; min-width: 64px; text-align: center; padding: 14px 10px; border-left: none; border-top: 2px solid transparent; border-bottom: none; white-space: nowrap; }
       nav a.active { border-left-color: transparent; border-top-color: var(--accent); border-bottom-color: transparent; background: transparent; }
       #main { padding: 20px 16px 72px; overflow-y: auto; }
     }
@@ -664,7 +665,101 @@
           .p3-date-block { width: 52px; }
           .p3-num { font-size: 24px; }
         }
-      
+
+    /* =================== STAYS (AIRBNBS) =================== */
+    .stay-root { max-width: 680px; }
+    .stay-eyebrow {
+      font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 7px; font-weight: 700; opacity: 0.85;
+    }
+    .stay-name { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 3px; letter-spacing: -0.01em; }
+    .stay-address { font-size: 12px; color: var(--text-secondary); }
+    .stay-url { font-size: 10px; color: var(--text-muted); margin-top: 5px; }
+    .stay-url a { color: var(--text-muted); text-decoration: none; }
+    .stay-url a:hover { color: var(--accent); }
+    .stay-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 12px 0;
+    }
+    .stay-stat {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 4px; padding: 8px 10px; text-align: center;
+    }
+    .stay-stat-label { font-size: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; display: block; }
+    .stay-stat-val { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 2px; display: block; }
+    .stay-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stay-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 12px 14px; }
+    .stay-box h4 {
+      font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+    }
+    .stay-box ul { list-style: none; }
+    .stay-box li { font-size: 12px; color: var(--text-secondary); line-height: 1.65; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .stay-box li:last-child { border-bottom: none; }
+    .stay-card-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; margin-bottom: 10px; }
+    .stay-divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    @media (max-width: 600px) {
+      .stay-stats { grid-template-columns: 1fr 1fr; }
+      .stay-boxes { grid-template-columns: 1fr; }
+    }
+
+    /* =================== CHECKLIST =================== */
+    .checklist-root { max-width: 680px; }
+    .checklist-group { margin-bottom: 22px; }
+    .checklist-group-label {
+      font-size: 10px; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 8px; padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cl-items { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .cl-item {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 11px 13px; border-bottom: 1px solid var(--border);
+      transition: background 0.12s; cursor: pointer;
+    }
+    .cl-item:last-child { border-bottom: none; }
+    .cl-item:hover { background: var(--surface-raised); }
+    .cl-check {
+      width: 15px; height: 15px; border-radius: 3px; border: 1px solid var(--border);
+      background: none; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px; font-size: 9px; transition: all 0.15s;
+    }
+    .cl-check.done { background: rgba(122,184,122,0.15); border-color: rgba(122,184,122,0.5); color: var(--green); }
+    .cl-body { flex: 1; min-width: 0; }
+    .cl-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .cl-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; line-height: 1.5; }
+    .cl-how { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+    .cl-badge {
+      flex-shrink: 0; font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 7px; border-radius: 3px; margin-top: 2px; white-space: nowrap;
+    }
+    .cl-done  { background: rgba(122,184,122,0.1); color: var(--green); border: 1px solid rgba(122,184,122,0.25); }
+    .cl-now   { background: rgba(184,122,122,0.12); color: var(--red); border: 1px solid rgba(184,122,122,0.25); }
+    .cl-soon  { background: rgba(200,169,122,0.1); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
+    .cl-later { background: rgba(85,85,85,0.18); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* =================== TIPS / NEED TO KNOW =================== */
+    .tips-root { max-width: 680px; }
+    .tip-section { margin-bottom: 6px; }
+    .tip-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 15px; cursor: pointer; user-select: none;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+      transition: background 0.12s;
+    }
+    .tip-section.tip-open .tip-hdr { border-radius: 4px 4px 0 0; }
+    .tip-hdr:hover { background: var(--surface-raised); }
+    .tip-hdr-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .tip-chevron { font-size: 10px; color: var(--text-muted); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); }
+    .tip-section.tip-open .tip-chevron { transform: rotate(180deg); color: var(--accent); }
+    .tip-body {
+      display: none; background: var(--surface); border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 4px 4px; padding: 12px 15px;
+    }
+    .tip-section.tip-open .tip-body { display: block; }
+    .tip-body ul { list-style: none; }
+    .tip-body li { font-size: 12px; color: var(--text-secondary); line-height: 1.7; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .tip-body li:last-child { border-bottom: none; }
+    .tip-body li strong { color: var(--text); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -681,6 +776,10 @@
     <a data-view="balances" class="active">Balances</a>
     <a data-view="expenses">Expenses</a>
     <a data-view="itinerary">Itinerary</a>
+    <a data-view="tokyo">Tokyo</a>
+    <a data-view="gotemba">Gotemba</a>
+    <a data-view="checklist">Checklist</a>
+    <a data-view="tips">Tips</a>
   </nav>
 </div>
 
@@ -1329,6 +1428,392 @@
 
     </div><!-- .itin-root -->
   </div><!-- #view-itinerary -->
+
+  <!-- =================== TOKYO STAY =================== -->
+  <div id="view-tokyo" class="view">
+    <div class="stay-root">
+      <h1>Tokyo Stay</h1>
+      <div class="stay-card-shell">
+        <div class="stay-eyebrow">Creative Terrace UNBOUND · ★5.0</div>
+        <div class="stay-name">5-chome-45-8 Sugamo</div>
+        <div class="stay-address">Toshima City, Tokyo 170-0002</div>
+        <div class="stay-url"><a href="https://airbnb.com/rooms/1332341073784968354" target="_blank">airbnb.com/rooms/1332341073784968354</a></div>
+        <div class="stay-stats">
+          <div class="stay-stat"><span class="stay-stat-label">Size</span><span class="stay-stat-val">123m²</span></div>
+          <div class="stay-stat"><span class="stay-stat-label">Bedrooms</span><span class="stay-stat-val">4 / 5 beds</span></div>
+          <div class="stay-stat"><span class="stay-stat-label">Bathrooms</span><span class="stay-stat-val">1.5 private</span></div>
+          <div class="stay-stat"><span class="stay-stat-label">Max guests</span><span class="stay-stat-val">8 people</span></div>
+        </div>
+      </div>
+      <div class="stay-boxes">
+        <div class="stay-box">
+          <h4>Getting There</h4>
+          <ul>
+            <li><strong>Aug 15 (arrival):</strong> N'EX to Ikebukuro (~85 min, ¥3,070) then Yamanote Line to Sugamo (2 stops, 4 min)</li>
+            <li><strong>Aug 21 (James):</strong> Keikyu Line to Shinagawa to Yamanote to Sugamo · ~55 min · ¥660. Send address + entry code in advance.</li>
+            <li><strong>Aug 20 (return from Hakone):</strong> Drive car to Sixt Shibuya, then Yamanote to Sugamo</li>
+            <li><strong>Aug 27 (departure):</strong> Sugamo to Shinagawa (Yamanote) to Keikyu to HND T3 · ~55 min · ¥880</li>
+          </ul>
+        </div>
+        <div class="stay-box">
+          <h4>Location & Nearby</h4>
+          <ul>
+            <li>8 min walk from Toden Shin-Koshinzuka Station (Arakawa tram line)</li>
+            <li>Sugamo Station (Yamanote Line) - direct to Ikebukuro, Shibuya, Shinjuku, Ueno, Akihabara</li>
+            <li>Round One Ikebukuro: 2 stops by train</li>
+            <li>Ramen Gojuban (Zoshigaya): walking distance from Airbnb</li>
+            <li>LUUP e-scooter ports available in Toshima ward</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== GOTEMBA STAY =================== -->
+  <div id="view-gotemba" class="view">
+    <div class="stay-root">
+      <h1>Gotemba Stay</h1>
+      <div class="stay-card-shell">
+        <div class="stay-eyebrow">2 min walk from Gotemba Station · ★4.79</div>
+        <div class="stay-name">1929 Niihashi, Gotemba</div>
+        <div class="stay-address">Shizuoka 412-0043 · Aug 17–20</div>
+        <div class="stay-url"><a href="https://airbnb.com/rooms/1544209114423978545" target="_blank">airbnb.com/rooms/1544209114423978545</a></div>
+        <div class="stay-stats">
+          <div class="stay-stat"><span class="stay-stat-label">Size</span><span class="stay-stat-val">134m²</span></div>
+          <div class="stay-stat"><span class="stay-stat-label">Bedrooms</span><span class="stay-stat-val">5 / 12 beds</span></div>
+          <div class="stay-stat"><span class="stay-stat-label">Bathrooms</span><span class="stay-stat-val">2 private</span></div>
+          <div class="stay-stat"><span class="stay-stat-label">Max guests</span><span class="stay-stat-val">12 people</span></div>
+        </div>
+      </div>
+      <div class="stay-boxes">
+        <div class="stay-box">
+          <h4>Getting There</h4>
+          <ul>
+            <li><strong>Aug 17:</strong> Drive from Sugamo via Tomei Expressway · Costco Zama stop en route · ~1.5 hrs to Gotemba · on-site gravel driveway parking</li>
+            <li>2 min walk from JR Gotemba Station - Kirin Distillery free shuttle departs from here</li>
+            <li><strong>Aug 20:</strong> Check out morning, Kirin Distillery (~15 min drive), Hakone day trip, drive back to Tokyo that night</li>
+          </ul>
+        </div>
+        <div class="stay-box">
+          <h4>Nearby</h4>
+          <ul>
+            <li>Fun2Drive office: ~15 min drive</li>
+            <li>Fujisan Parking (Fuji shuttle): ~15 min drive</li>
+            <li>Kirin Fuji Gotemba Distillery: ~15 min drive</li>
+            <li>Gotemba Premium Outlets: ~10 min drive</li>
+            <li>Sawayaka (hamburg steak): ~10 min drive</li>
+            <li>Toraya Kobo: ~10 min drive</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== CHECKLIST =================== -->
+  <div id="view-checklist" class="view">
+    <div class="checklist-root">
+      <h1>Booking Checklist</h1>
+
+      <div class="checklist-group">
+        <div class="checklist-group-label">Done</div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCl('fun2drive')">
+            <div class="cl-check done" data-id="fun2drive">✓</div>
+            <div class="cl-body">
+              <div class="cl-title">Fun2Drive - Ultimate Hakone Drive (Aug 18)</div>
+              <div class="cl-sub">France (353605236494063) · Steven (353605252020361) · Complete membership ≥24 hrs before start</div>
+              <div class="cl-how">Bring cash, credit card, passport, license, and original IDP on Aug 18</div>
+            </div>
+            <span class="cl-badge cl-done">Done</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('sushisho')">
+            <div class="cl-check done" data-id="sushisho">✓</div>
+            <div class="cl-body">
+              <div class="cl-title">Sushisho Masa - Aug 22, 9 PM</div>
+              <div class="cl-sub">5 people · Minami-Aoyama · closed Mondays</div>
+              <div class="cl-how">pocket-concierge.jp/en/restaurants/244036</div>
+            </div>
+            <span class="cl-badge cl-done">Done</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('airbnb-tokyo')">
+            <div class="cl-check done" data-id="airbnb-tokyo">✓</div>
+            <div class="cl-body">
+              <div class="cl-title">Tokyo Airbnb - Creative Terrace UNBOUND (Aug 15–27 · 12 nights)</div>
+              <div class="cl-sub">5-chome-45-8 Sugamo, Toshima City · 4 bed / 123m² / ★5.0</div>
+              <div class="cl-how">airbnb.com/rooms/1332341073784968354</div>
+            </div>
+            <span class="cl-badge cl-done">Done</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('airbnb-gotemba')">
+            <div class="cl-check done" data-id="airbnb-gotemba">✓</div>
+            <div class="cl-body">
+              <div class="cl-title">Gotemba Airbnb - Na's House (Aug 17–20)</div>
+              <div class="cl-sub">1929 Niihashi, Gotemba · 5 bed / 134m² / ★4.79 · 2 min walk JR Gotemba Station · on-site parking</div>
+              <div class="cl-how">airbnb.com/rooms/1544209114423978545</div>
+            </div>
+            <span class="cl-badge cl-done">Done</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-label">Book Now</div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCl('kotaro')">
+            <div class="cl-check" data-id="kotaro"></div>
+            <div class="cl-body">
+              <div class="cl-title">Kotaro Izakaya</div>
+              <div class="cl-sub">Best premium izakaya in Tokyo · Omotesando</div>
+              <div class="cl-how">Call daily at 1 PM JST · 30-day rolling window</div>
+            </div>
+            <span class="cl-badge cl-now">Now</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('sushi-keita')">
+            <div class="cl-check" data-id="sushi-keita"></div>
+            <div class="cl-body">
+              <div class="cl-title">Sushi Keita (Aug 26)</div>
+              <div class="cl-sub">1 Michelin star · Omakase · Higashi-Ginza</div>
+              <div class="cl-how">omakase.in/en/r/ip613855</div>
+            </div>
+            <span class="cl-badge cl-now">Now</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('narikura')">
+            <div class="cl-check" data-id="narikura"></div>
+            <div class="cl-body">
+              <div class="cl-title">Tonkatsu Narikura (Aug 25)</div>
+              <div class="cl-sub">Best tonkatsu in Tokyo · Heritage pork omakase · Sangenjaya</div>
+              <div class="cl-how">omakase.in/en/r/qw473765</div>
+            </div>
+            <span class="cl-badge cl-now">Now</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('komiyama')">
+            <div class="cl-check" data-id="komiyama"></div>
+            <div class="cl-body">
+              <div class="cl-title">Komiyama-nishiazabu (Aug 23)</div>
+              <div class="cl-sub">Omi wagyu omakase counter · Nishi-Azabu</div>
+              <div class="cl-how">tabelog.com/en/tokyo/A1307/A130701/13230924</div>
+            </div>
+            <span class="cl-badge cl-now">Now</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('tobiuishi')">
+            <div class="cl-check" data-id="tobiuishi"></div>
+            <div class="cl-body">
+              <div class="cl-title">Wagyu Yakiniku Tobiuishi Iidabashi (Aug 25)</div>
+              <div class="cl-sub">All-private-room wagyu yakiniku · ¥8–9k/person · 5 pax</div>
+              <div class="cl-how">tabelog.com/en/tokyo/A1309/A130905/13168309 · online instant reservation</div>
+            </div>
+            <span class="cl-badge cl-now">Now</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('hachigou')">
+            <div class="cl-check" data-id="hachigou"></div>
+            <div class="cl-body">
+              <div class="cl-title">Ginza Hachigou (Aug 26)</div>
+              <div class="cl-sub">Former Michelin star · 60 bowls/day</div>
+              <div class="cl-how">TableCheck · 30 slots released Saturdays 9 AM JST</div>
+            </div>
+            <span class="cl-badge cl-now">Now</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-label">Pre-departure</div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCl('idp')">
+            <div class="cl-check" data-id="idp"></div>
+            <div class="cl-body">
+              <div class="cl-title">IDP - International Driving Permit</div>
+              <div class="cl-sub">France (rental car + Fun2Drive) · Steven (Fun2Drive only) · Alvin + Shuan = passengers, no IDP needed</div>
+              <div class="cl-how">AAA · in-person · 15 min · license + passport photo · France and Steven only</div>
+            </div>
+            <span class="cl-badge cl-soon">Pre-depart</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('nex')">
+            <div class="cl-check" data-id="nex"></div>
+            <div class="cl-body">
+              <div class="cl-title">N'EX Reserved Seats (Aug 15)</div>
+              <div class="cl-sub">NRT to Ikebukuro · ¥3,070 · also for James on Aug 21 · transfer to Yamanote at Ikebukuro to Sugamo</div>
+              <div class="cl-how">JR East online or at NRT airport kiosk</div>
+            </div>
+            <span class="cl-badge cl-soon">Pre-depart</span>
+          </div>
+          <div class="cl-item" onclick="toggleCl('shuttle')">
+            <div class="cl-check" data-id="shuttle"></div>
+            <div class="cl-body">
+              <div class="cl-title">Fuji Shuttle Tickets (Aug 19)</div>
+              <div class="cl-sub">Fujisan Parking to 5th Station · ¥3,000 round trip</div>
+              <div class="cl-how">Jorudan - buy online to skip queue</div>
+            </div>
+            <span class="cl-badge cl-soon">Pre-depart</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-label">Opens May / Jun 2026</div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCl('fuji-res')">
+            <div class="cl-check" data-id="fuji-res"></div>
+            <div class="cl-body">
+              <div class="cl-title">Mt. Fuji Reservation (Aug 19)</div>
+              <div class="cl-sub">Yoshida Trail · ¥4,000/person · 4,000 climbers/day cap · 1,000 slots released at midnight JST daily</div>
+              <div class="cl-how">fujisan-climb.jp · book immediately when 2026 window opens</div>
+            </div>
+            <span class="cl-badge cl-later">May/Jun</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =================== TIPS / NEED TO KNOW =================== -->
+  <div id="view-tips" class="view">
+    <div class="tips-root">
+      <h1>Need to Know</h1>
+
+      <div class="tip-section" id="tip-fuji-rules">
+        <div class="tip-hdr" onclick="toggleTip('tip-fuji-rules')">
+          <span class="tip-hdr-title">Mt. Fuji - Yoshida Trail Rules (Aug 19)</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li>First shuttle from Fujisan Parking: 4:00 AM, arrives 5th Station 4:45 AM. Arrive parking by 3:45 AM to queue.</li>
+            <li>Gate closes 2 PM for all climbers without mountain hut reservations. 4:45 AM start gives you a wide margin.</li>
+            <li>Rangers conduct mandatory gear checks. No sneakers or sandals - proper hiking boots required for all four.</li>
+            <li>Trail capped at 4,000 climbers/day. 1,000 slots released daily at midnight JST. Book at fujisan-climb.jp the moment the 2026 season opens (May/June).</li>
+            <li>Summit temperature ~5°C in August. Bring layers, headlamps, snacks, plenty of water.</li>
+            <li>Gate fee ¥4,000/person - can pre-pay online with reservation or pay cash at gate.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-fuji-gear">
+        <div class="tip-hdr" onclick="toggleTip('tip-fuji-gear')">
+          <span class="tip-hdr-title">Mt. Fuji - Packing List (gear check is enforced)</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li><strong>Mandatory:</strong> proper hiking boots (rangers will turn you around), headlamp + spare batteries, warm layers (summit ~5°C even in August), rain jacket</li>
+            <li><strong>Strongly recommended:</strong> trekking poles (rental at 5th Station ~¥500), gloves, buff/neck gaiter, snacks with sugar (onigiri, energy gels, chocolate), 2L water minimum</li>
+            <li><strong>At 5th Station:</strong> last chance to rent/buy gear, use a proper toilet, eat before the climb. Don't skip this.</li>
+            <li>Mountain huts sell hot food, drinks, and oxygen cans (~¥1,500). Altitude sickness is real - if someone feels severe nausea or dizziness, descend immediately.</li>
+            <li>Sunrise timing Aug 19: approximately 5:00 AM at the summit. With a 4:45 AM 5th Station start and ~6 hr ascent, you won't catch sunrise at the top. The trail and views are excellent in full daylight.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-driving">
+        <div class="tip-hdr" onclick="toggleTip('tip-driving')">
+          <span class="tip-hdr-title">Driving Leg - France, Shuan, Alvin, Steven</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li>Rental: Sixt · 1 car · Aug 17–21 · Shibuya Udagawacho branch · confirm ETC card included</li>
+            <li>Drive on the left. Steering wheel on the right. Speed limit: 100 km/h on expressways, 60 km/h on regular roads.</li>
+            <li>ETC lanes: stay in ETC-marked lanes at toll booths - the card handles it automatically. Do not enter cash-only lanes.</li>
+            <li><strong>IDP:</strong> France (rental + Fun2Drive) and Steven (Fun2Drive only) - get at AAA before departure. Alvin and Shuan are passengers.</li>
+            <li>Expressway rest stops (PA/SA) are excellent. Ashigara SA on the Tomei near Gotemba is worth a stop.</li>
+            <li>Costco Zama opens 10 AM weekdays - plan pickup timing accordingly.</li>
+            <li>If in an accident: call 110 (police) and 119 (ambulance). Do not move the car. Contact Sixt emergency line - number will be in the rental docs.</li>
+            <li>Return car Aug 21 morning at Shibuya Udagawacho before settling back into Tokyo. Parking in the city is ¥500–1,000/hr and unnecessary.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-james">
+        <div class="tip-hdr" onclick="toggleTip('tip-james')">
+          <span class="tip-hdr-title">James - Arrival Aug 21 (NH 107)</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li>Flight: NH 107 SFO to <strong>HND (Haneda) Terminal 3</strong> - not NRT. Departs Aug 20 night, lands HND morning of Aug 21.</li>
+            <li>From HND T3: Keikyu Line to Shinagawa (~13 min, ¥330) to Yamanote Line to Sugamo (~25 min) to 7–9 min walk to Airbnb. Total ~55 min, ¥660.</li>
+            <li>Send James the Airbnb address (5-chome-45-8 Sugamo, Toshima City) and entry code before departure. France/Shuan/Alvin/Steven will already be back from Hakone.</li>
+            <li>Buy Suica IC card at HND T3 arrivals - tap on/off for all trains, no need to buy individual tickets.</li>
+            <li>Restaurant reservations Aug 22+ are already made for 5 people.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-luup">
+        <div class="tip-hdr" onclick="toggleTip('tip-luup')">
+          <span class="tip-hdr-title">LUUP - E-Scooter Sharing Around Tokyo</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li><strong>Download app + register before arriving</strong> - ~10 min, requires passport upload + credit card. No driver's license needed. Must pass 100% in-app safety test (retriable).</li>
+            <li><strong>Pricing:</strong> ¥50 unlock + ¥15/min · 10 min ride ~¥200 · promo code <strong>NEW RIDE</strong> = free first 30 min</li>
+            <li><strong>Ports:</strong> 7,900+ across Tokyo - pick up anywhere, drop off anywhere. Select return port in app before riding. Must park inside white LUUP rectangle + take photo to end ride.</li>
+            <li><strong>Rules:</strong> left side of road / bike lanes only · no sidewalks above 6 km/h · no phone, earphones, passengers, luggage · max 20 km/h · violations shared with police</li>
+            <li><strong>Best hops this trip:</strong> Shimokita to Omotesando · Ginza to Azabu · Shibuya to Daikanyama · Nakameguro canal to Daikanyama · late night when trains stop</li>
+            <li>Coverage includes Toshima (Sugamo/Ikebukuro area) - can LUUP from the Airbnb neighborhood. Check battery before unlocking. Avoid riding in rain.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-essentials">
+        <div class="tip-hdr" onclick="toggleTip('tip-essentials')">
+          <span class="tip-hdr-title">Tokyo Essentials</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li><strong>Suica IC card:</strong> buy at NRT/HND airport on arrival. Tap on/off every train, bus, and most convenience stores and vending machines. Load money at any station kiosk.</li>
+            <li><strong>Cash:</strong> Japan is still heavily cash-based. Sushi Dai, Golden Gai bars, many ramen shops are cash only. Convenience store ATMs (7-Eleven, Japan Post) accept foreign cards reliably. Always carry ¥10,000+ on you.</li>
+            <li><strong>Google Maps:</strong> works perfectly for transit directions - download Tokyo offline map before leaving wifi.</li>
+            <li><strong>Tipping:</strong> never tip in Japan. It can be considered rude. Exceptional service is the standard.</li>
+            <li><strong>Train etiquette:</strong> no talking on phone, no eating, speak quietly, priority seats for elderly/pregnant. Queuing is strict - stand at marked spots on the platform.</li>
+            <li><strong>Last trains:</strong> Yamanote Line runs until ~12:30–1:00 AM. After that, taxi or LUUP. Taxi app: GO app (English-friendly).</li>
+            <li><strong>JR Pass:</strong> not worth it for this itinerary - mostly Tokyo metro + driving, not Shinkansen.</li>
+            <li><strong>Weather Aug:</strong> 32–36°C / 90–97°F, high humidity. Start every day early. Stay hydrated. Convenience stores have cold drinks and cold towels.</li>
+            <li><strong>Luggage:</strong> main bags stay at Airbnb during drive leg (Aug 17–21). Pack only essentials + hiking gear into a single bag each.</li>
+            <li><strong>Obon:</strong> ends Aug 16 - domestic travel is at peak before then. Crowds ease significantly once you hit the road Aug 17.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-golden-gai">
+        <div class="tip-hdr" onclick="toggleTip('tip-golden-gai')">
+          <span class="tip-hdr-title">Golden Gai - Shinjuku</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li>200+ bars across 6 narrow alleys. Each seats 4–10 people max. With 5 of you, you'll often take over the whole bar.</li>
+            <li><strong>Cover charges:</strong> ¥500–1,500/person, usually includes a small snack (otoshi). Budget ¥2,000–3,000 per bar including 1–2 drinks.</li>
+            <li><strong>Cash only.</strong> Best atmosphere 9 PM–1 AM. Walk all six alleys first to get a feel before committing.</li>
+            <li><strong>Start at Albatross</strong> - 3 narrow floors, rooftop terrace, English-speaking staff, no cover. Best warm-up bar for newcomers.</li>
+            <li><strong>Others worth finding:</strong> Deathmatch in Hell (horror-themed, Japanese whisky, open until 3 AM) · La Jetée (film-themed, classic cocktails) · The Open Book (literary bar, welcomes all visitors) · Golden Gai red. (coffee shochu, American general store vibe)</li>
+            <li>Some bars are members-only or regulars-only - if a place feels unwelcoming, move on. Plenty that love visitors.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-section" id="tip-pickleball">
+        <div class="tip-hdr" onclick="toggleTip('tip-pickleball')">
+          <span class="tip-hdr-title">Tokyo Tower Pickleball</span>
+          <span class="tip-chevron">▾</span>
+        </div>
+        <div class="tip-body">
+          <ul>
+            <li>Rooftop pickleball courts at Tokyo Tower FootTown RF - opened July 2025, one of the most unique sports setups in Tokyo</li>
+            <li>Court rental by time slot - no individual entry, must book the whole court. Paddles and balls free to borrow at reception.</li>
+            <li>Book via reserva.be/tokyotowerpickleball · full details at tokyotower-pickleball.jp</li>
+            <li>Location: Tokyo Tower, 4-2-8 Shibakoen, Minato City - 10 min from Ginza, 5 min from Azabu. Fits naturally into the Aug 23 Ginza/Azabu day or Aug 26 last day morning.</li>
+            <li>Best for 4 players - group of 5 could rotate or split into singles/doubles</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <div id="modal-overlay">
@@ -1658,7 +2143,7 @@ function renderSettle() {
       <div class="net-cards">${netCardsHtml}</div>
     </div>
     <div class="balances-section">
-      <h2>Optimized — ${settlements.length} transaction${settlements.length === 1 ? '' : 's'}</h2>
+      <h2>Optimized - ${settlements.length} transaction${settlements.length === 1 ? '' : 's'}</h2>
       ${settlementsHtml}
     </div>`;
 }
@@ -1871,7 +2356,7 @@ async function fetchData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     appData = await res.json();
 
-    document.getElementById('trip-name-display').textContent = appData.tripName || 'Japan 2026';
+    document.getElementById('trip-name-display').textContent = appData.tripName || 'da boyz terrorize japan';
     document.title = (appData.tripName || 'da boyz terrorize japan');
 
     const bannerText = document.getElementById('banner-text');
@@ -1879,7 +2364,7 @@ async function fetchData() {
 
     renderCurrentView();
   } catch (e) {
-    document.getElementById('banner-text').textContent = 'Could not load data — ' + e.message;
+    document.getElementById('banner-text').textContent = 'Could not load data - ' + e.message;
     document.getElementById('banner').style.background = 'var(--red)';
     document.getElementById('banner').style.color = '#fff';
   }
@@ -1939,7 +2424,7 @@ function initItinerary() {
   if (itinInitialized) return;
   itinInitialized = true;
 
-  // IntersectionObserver scroll reveals — covers both .itin-day and .p3-day
+  // IntersectionObserver scroll reveals - covers both .itin-day and .p3-day
   itinObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -1956,10 +2441,45 @@ function initItinerary() {
   window.itinObserver = itinObserver;
 }
 
+// ===== CHECKLIST =====
+function toggleCl(id) {
+  const el = document.querySelector(`.cl-check[data-id="${id}"]`);
+  if (!el) return;
+  const isNowDone = !el.classList.contains('done');
+  el.classList.toggle('done', isNowDone);
+  el.textContent = isNowDone ? '✓' : '';
+  const stored = JSON.parse(localStorage.getItem('clState') || '{}');
+  stored[id] = isNowDone;
+  localStorage.setItem('clState', JSON.stringify(stored));
+}
+
+function initChecklist() {
+  const stored = JSON.parse(localStorage.getItem('clState') || '{}');
+  document.querySelectorAll('.cl-check[data-id]').forEach(el => {
+    const id = el.dataset.id;
+    if (id in stored) {
+      el.classList.toggle('done', stored[id]);
+      el.textContent = stored[id] ? '✓' : '';
+    }
+  });
+}
+
+// ===== TIPS =====
+function toggleTip(id) {
+  const section = document.getElementById(id);
+  if (section) section.classList.toggle('tip-open');
+}
+
 // Restore last active tab
 const _savedView = localStorage.getItem('activeView') || 'balances';
 navigateTo(_savedView);
 if (_savedView === 'itinerary') setTimeout(initItinerary, 50);
+if (_savedView === 'checklist') initChecklist();
+
+// Init checklist when navigating to it
+document.querySelectorAll('nav a[data-view="checklist"]').forEach(a => {
+  a.addEventListener('click', () => setTimeout(initChecklist, 50));
+});
 </script>
 </body>
 </html>
