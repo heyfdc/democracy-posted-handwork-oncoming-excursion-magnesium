@@ -1872,7 +1872,7 @@ async function fetchData() {
     appData = await res.json();
 
     document.getElementById('trip-name-display').textContent = appData.tripName || 'Japan 2026';
-    document.title = (appData.tripName || 'Japan 2026') + ' · Costs (View Only)';
+    document.title = (appData.tripName || 'da boyz terrorize japan');
 
     const bannerText = document.getElementById('banner-text');
     bannerText.textContent = 'Last updated: ' + formatSyncedAt(appData.syncedAt);
