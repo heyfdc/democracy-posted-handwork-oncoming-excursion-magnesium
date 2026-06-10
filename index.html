@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Japan 2026 · Costs (View Only)</title>
+  <title>da boyz terrorize japan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -205,10 +205,11 @@
       #banner { font-size: 11px; gap: 8px; }
       #sidebar { width: 100%; flex-direction: row; flex-shrink: 0; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
       #sidebar-title { border-bottom: none; padding: 12px 16px; white-space: nowrap; }
-      nav { display: flex; flex-direction: row; overflow-x: auto; }
-      nav a { padding: 12px 14px; border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; }
-      nav a.active { border-left-color: transparent; border-bottom-color: var(--accent); background: transparent; }
-      #main { padding: 20px 16px; overflow-y: auto; }
+      #sidebar { flex-direction: column; }
+      nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; display: flex; flex-direction: row; background: #161616; border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); overflow-x: visible; }
+      nav a { flex: 1; text-align: center; padding: 14px 8px; border-left: none; border-top: 2px solid transparent; border-bottom: none; white-space: nowrap; }
+      nav a.active { border-left-color: transparent; border-top-color: var(--accent); border-bottom-color: transparent; background: transparent; }
+      #main { padding: 20px 16px 72px; overflow-y: auto; }
     }
 
     /* =================== ITINERARY — REDESIGNED =================== */
@@ -610,7 +611,7 @@
           line-height: 1.3; margin-bottom: 3px;
         }
         .p3-poi-desc {
-          font-size: 10px; color: var(--text-muted); line-height: 1.5;
+          font-size: 10px; color: var(--text-secondary); line-height: 1.5;
         }
         .p3-poi-badge {
           display: inline-block; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
@@ -628,13 +629,14 @@
 
         /* Flow note */
         .p3-note {
-          font-size: 10.5px; color: var(--text-muted); line-height: 1.65;
+          font-size: 10.5px; color: var(--text-secondary); line-height: 1.65;
           background: rgba(255,255,255,0.02);
           border-left: 2px solid rgba(80,180,140,0.25);
           padding: 8px 12px;
           border-radius: 0 6px 6px 0;
         }
         .p3-note strong { color: var(--text-secondary); font-weight: 600; }
+        .p3-anchors .p3-note { flex: 0 0 100%; margin-top: 4px; }
 
         /* Departure card */
         .p3-depart {
@@ -668,15 +670,12 @@
 <body>
 
 <div id="banner">
-  <span id="banner-badge">View Only</span>
-  <div id="banner-dot"></div>
   <span id="banner-text">Loading…</span>
 </div>
 
 <div id="sidebar">
   <div id="sidebar-title">
     <div id="trip-name-display">Japan 2026</div>
-    <span>Cost Tracker</span>
   </div>
   <nav>
     <a data-view="balances" class="active">Balances</a>
@@ -950,14 +949,7 @@
             <div class="p3-chevron">▾</div>
           </div>
           <div class="p3-anchors">
-            <div class="p3-anchor-item">
-              <div class="p3-anchor-dot"></div>
-              <div><div class="p3-anchor-name">James arrives HND · NH 107</div><div class="p3-anchor-meta">Keikyu → Shinagawa → Yamanote → Sugamo · ~55 min · ¥660</div></div>
-            </div>
-            <div class="p3-anchor-item">
-              <div class="p3-anchor-dot"></div>
-              <div><div class="p3-anchor-name">Rāmenya Shima — first group dinner</div><div class="p3-anchor-meta">Tabelog top ramen · Shinjuku area · no reservation</div></div>
-            </div>
+            <div class="p3-note">Recovery day after Phase 2. Keep it flexible and local — don't push distance. James just flew in from SFO, the rest of you are coming off Fuji and Hakone.</div>
           </div>
           <div class="p3-body">
             <div class="p3-section">
@@ -976,9 +968,6 @@
                 <div class="p3-poi"><div class="p3-poi-name">Round One Ikebukuro</div><div class="p3-poi-desc">Arcade, bowling, batting, billiards. Ikebukuro, open late. Good low-stakes group activity.</div></div>
                 <div class="p3-poi"><div class="p3-poi-name">Kabukicho wander</div><div class="p3-poi-desc">Shinjuku nightlife. Light wander — easy to bail when jet lag hits.</div></div>
               </div>
-            </div>
-            <div class="p3-section">
-              <div class="p3-note">Recovery day after Phase 2. Keep it flexible and local — don't push distance. James just flew in from SFO, the rest of you are coming off Fuji and Hakone.</div>
             </div>
           </div>
         </div>
@@ -1003,6 +992,7 @@
                 <div class="p3-anchor-meta">High-end omakase · Minami-Aoyama · 15 min taxi from Nakameguro</div>
               </div>
             </div>
+            <div class="p3-note"><strong>Flow:</strong> Daikanyama (Kapital cluster, brunch) → Nakameguro canal walk + Onibus → Harajuku/Omotesando (Koffee Mameya, NUIR, street snacks) → drift south toward Roppongi/Azabu (teamLab or pickleball if booked, KAPITAL Legs, Kotaro/SAVOY optional) → taxi to Minami-Aoyama for Sushisho 9 PM.</div>
           </div>
           <div class="p3-body">
             <div class="p3-section">
@@ -1060,9 +1050,6 @@
                 <div class="p3-poi"><div class="p3-poi-name">Nonbei Yokocho</div><div class="p3-poi-desc">Shibuya lantern-lit yakitori alley. Good post-Sushisho nightcap street.</div></div>
               </div>
             </div>
-            <div class="p3-section">
-              <div class="p3-note"><strong>Flow:</strong> Daikanyama (Kapital cluster, brunch) → Nakameguro canal walk + Onibus → Harajuku/Omotesando (Koffee Mameya, NUIR, street snacks) → drift south toward Roppongi/Azabu (teamLab or pickleball if booked, KAPITAL Legs, Kotaro/SAVOY optional) → taxi to Minami-Aoyama for Sushisho 9 PM.</div>
-            </div>
           </div>
         </div>
       </div>
@@ -1077,6 +1064,9 @@
               <div class="p3-day-zone">Kuramae · Asakusa · Kappabashi · Ueno · Akihabara</div>
             </div>
             <div class="p3-chevron">▾</div>
+          </div>
+          <div class="p3-anchors">
+            <div class="p3-note"><strong>Flow:</strong> Kuramae (Pelican + HATCOFFEE) → Asakusa (Nakamise, street snacks) → Kappabashi (Kama-Asa) → Ueno (HINOYA/AMERICAYA, lunch) → Akihabara (batting cages, night wander). All walkable or one stop on the Ginza/Asakusa Line from Sugamo.</div>
           </div>
           <div class="p3-body">
             <div class="p3-section">
@@ -1123,9 +1113,6 @@
                 <div class="p3-poi"><div class="p3-poi-name">Active Akiba Batting Center</div><div class="p3-poi-desc">Multiple cage types, late night. Akihabara — add an Akiba wander after dark.</div></div>
               </div>
             </div>
-            <div class="p3-section">
-              <div class="p3-note"><strong>Flow:</strong> Kuramae (Pelican + HATCOFFEE) → Asakusa (Nakamise, street snacks) → Kappabashi (Kama-Asa) → Ueno (HINOYA/AMERICAYA, lunch) → Akihabara (batting cages, night wander). All walkable or one stop on the Ginza/Asakusa Line from Sugamo.</div>
-            </div>
           </div>
         </div>
       </div>
@@ -1146,9 +1133,10 @@
               <div class="p3-anchor-dot"></div>
               <div>
                 <div class="p3-anchor-name">Sushi Dai — Toyosu<span class="p3-anchor-badge early">Queue 4:15 AM</span></div>
-                <div class="p3-anchor-meta">Bib Gourmand omakase · ~¥5,500 · cash only · Open Monday ✓ · closed Sun/Wed</div>
+                <div class="p3-anchor-meta">Bib Gourmand omakase · ~¥5,500 · cash only</div>
               </div>
             </div>
+            <div class="p3-note"><strong>Flow:</strong> 4:15 AM Toyosu queue → Sushi Dai done ~8 AM → Tsukiji wander → Ginza corridor at leisure (coffee, shopping, shaved ice, lunch queue) → afternoon activities or nap → evening anchor. Early start earns a built-in rest window.</div>
           </div>
           <div class="p3-body">
             <div class="p3-section">
@@ -1193,9 +1181,6 @@
                 <div class="p3-poi"><div class="p3-poi-name">Wagyu Tobiuishi Iidabashi<span class="p3-poi-badge res">Tabelog</span></div><div class="p3-poi-desc">All-private-room wagyu yakiniku, ¥8–9k/person. Iidabashi — short ride from Ginza.</div></div>
               </div>
             </div>
-            <div class="p3-section">
-              <div class="p3-note"><strong>Flow:</strong> 4:15 AM Toyosu queue → Sushi Dai done ~8 AM → Tsukiji wander → Ginza corridor at leisure (coffee, shopping, shaved ice, lunch queue) → afternoon activities or nap → evening anchor. Early start earns a built-in rest window.</div>
-            </div>
           </div>
         </div>
       </div>
@@ -1219,6 +1204,7 @@
                 <div class="p3-anchor-meta">Heritage pork omakase tonkatsu · evening anchor · 15-min bus south of Shimokitazawa</div>
               </div>
             </div>
+            <div class="p3-note"><strong>Flow:</strong> JR Chuo from Sugamo → Nakano (Whistler) → Koenji (vintage strip + curry) → Nishi-Ogikubo (A Tes Souhaits) → back to Shinjuku → Odakyu/Keio south to Shimokita (Ogawa Coffee, vintage cluster, Hitosuji ramen) → walk to Hatagaya (Blue Lug) → bus to Sangenjaya for Narikura evening.</div>
           </div>
           <div class="p3-body">
             <div class="p3-section">
@@ -1271,9 +1257,6 @@
                 <div class="p3-poi"><div class="p3-poi-name">Los Tacos Azules</div><div class="p3-poi-desc">Tacos, Sangenjaya — near Narikura. Pre or post-dinner bite.</div></div>
               </div>
             </div>
-            <div class="p3-section">
-              <div class="p3-note"><strong>Flow:</strong> JR Chuo from Sugamo → Nakano (Whistler) → Koenji (vintage strip + curry) → Nishi-Ogikubo (A Tes Souhaits) → back to Shinjuku → Odakyu/Keio south to Shimokita (Ogawa Coffee, vintage cluster, Hitosuji ramen) → walk to Hatagaya (Blue Lug) → bus to Sangenjaya for Narikura evening.</div>
-            </div>
           </div>
         </div>
       </div>
@@ -1297,6 +1280,7 @@
                 <div class="p3-anchor-meta">2 km from Airbnb · ramen_beast top 10 · Sushi Dai closed Wed ✓ already done Mon</div>
               </div>
             </div>
+            <div class="p3-note">Pack tonight. <strong>UA 876 departs HND T3 at 3:50 PM tomorrow.</strong> Sugamo → Shinagawa (Yamanote) → Keikyu → HND T3 · ~55 min · ¥880. At HND by 1:15 PM. Leave Airbnb no later than 12:30 PM.</div>
           </div>
           <div class="p3-body">
             <div class="p3-section">
@@ -1326,9 +1310,6 @@
                 <div class="p3-poi"><div class="p3-poi-name">Shinjuku Batting Center</div><div class="p3-poi-desc">Closer option if already in Shinjuku.</div></div>
                 <div class="p3-poi"><div class="p3-poi-name">Kabukicho wander</div><div class="p3-poi-desc">Shinjuku nightlife, one last time.</div></div>
               </div>
-            </div>
-            <div class="p3-section">
-              <div class="p3-note">Pack tonight. <strong>UA 876 departs HND T3 at 3:50 PM tomorrow.</strong> Sugamo → Shinagawa (Yamanote) → Keikyu → HND T3 · ~55 min · ¥880. At HND by 1:15 PM. Leave Airbnb no later than 12:30 PM.</div>
             </div>
           </div>
         </div>
@@ -1841,10 +1822,10 @@ function openExpenseDetail(id) {
       <span>Paid by <strong style="color:var(--text)">${escHtml(e.paidBy)}</strong></span>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
-      <span style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Total · ${splitTypeLabel}</span>
+      <span style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Total</span>
       <span style="font-size:20px;font-weight:600;color:var(--accent)">${formatAmount(e.amount, sym)}</span>
     </div>
-    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Per person</div>
+    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">${splitTypeLabel}</div>
     ${splitRows}
     ${itemizedHtml}
     <div class="modal-footer">
@@ -1865,14 +1846,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===== NAVIGATION =====
+function navigateTo(view) {
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  const link = document.querySelector(`nav a[data-view="${view}"]`);
+  if (link) link.classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(`view-${view}`).classList.add('active');
+  activeView = view;
+  localStorage.setItem('activeView', view);
+  if (appData) renderCurrentView();
+}
+
 document.querySelectorAll('nav a').forEach(link => {
   link.addEventListener('click', () => {
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    link.classList.add('active');
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(`view-${link.dataset.view}`).classList.add('active');
-    activeView = link.dataset.view;
-    renderCurrentView();
+    if (link.dataset.view === 'itinerary') setTimeout(initItinerary, 50);
+    navigateTo(link.dataset.view);
   });
 });
 
@@ -1968,10 +1956,10 @@ function initItinerary() {
   window.itinObserver = itinObserver;
 }
 
-// Hook into nav clicks to init itinerary on first visit
-document.querySelectorAll('nav a[data-view="itinerary"]').forEach(link => {
-  link.addEventListener('click', () => setTimeout(initItinerary, 50), { once: true });
-});
+// Restore last active tab
+const _savedView = localStorage.getItem('activeView') || 'balances';
+navigateTo(_savedView);
+if (_savedView === 'itinerary') setTimeout(initItinerary, 50);
 </script>
 </body>
 </html>
