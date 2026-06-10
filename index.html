@@ -476,6 +476,193 @@
       .itin-phase-title-text { font-size: 16px; }
       .itin-hero-title { font-size: clamp(46px, 14vw, 72px); }
     }
+        /* ── Phase 3 card system ─────────────────────── */
+        .p3-day {
+          margin-bottom: 8px;
+          opacity: 0; transform: translateY(18px); filter: blur(4px);
+          transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1),
+                      transform 0.7s cubic-bezier(0.32,0.72,0,1),
+                      filter 0.7s cubic-bezier(0.32,0.72,0,1);
+        }
+        .p3-day.revealed { opacity: 1; transform: none; filter: none; }
+        .p3-day.hidden { display: none; }
+
+        .p3-card {
+          background: #181818;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        /* Header strip */
+        .p3-hdr {
+          display: flex; align-items: center; gap: 0;
+          cursor: pointer; user-select: none;
+          border-bottom: 1px solid rgba(255,255,255,0.055);
+          transition: background 0.2s;
+        }
+        .p3-hdr:hover { background: rgba(255,255,255,0.025); }
+
+        .p3-date-block {
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          width: 64px; flex-shrink: 0; padding: 14px 0;
+          border-right: 1px solid rgba(255,255,255,0.07);
+        }
+        .p3-dow { font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .p3-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--text); line-height: 1; }
+
+        .p3-hdr-text { flex: 1; padding: 14px 16px; min-width: 0; }
+        .p3-day-name { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.2; }
+        .p3-day-zone { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+
+        .p3-chevron {
+          width: 28px; height: 28px; margin-right: 14px; flex-shrink: 0;
+          border-radius: 50%; border: 1px solid rgba(255,255,255,0.09);
+          background: rgba(255,255,255,0.03);
+          display: flex; align-items: center; justify-content: center;
+          color: var(--text-muted); font-size: 11px;
+          transition: transform 0.45s cubic-bezier(0.32,0.72,0,1), background 0.25s, border-color 0.25s, color 0.25s;
+        }
+        .p3-open .p3-chevron {
+          transform: rotate(180deg);
+          border-color: rgba(80,180,140,0.3);
+          background: rgba(80,180,140,0.08);
+          color: #50b48c;
+        }
+
+        /* Anchor strip — hidden until card is expanded */
+        .p3-anchors {
+          display: none;
+          flex-wrap: wrap; gap: 6px;
+          padding: 10px 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          background: rgba(80,180,140,0.04);
+        }
+        .p3-open .p3-anchors { display: flex; }
+        .p3-anchor-item {
+          display: flex; align-items: center; gap: 7px;
+          background: rgba(80,180,140,0.09);
+          border: 1px solid rgba(80,180,140,0.2);
+          border-radius: 8px;
+          padding: 6px 10px;
+        }
+        .p3-anchor-dot {
+          width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+          background: #50b48c;
+          box-shadow: 0 0 0 2px rgba(80,180,140,0.2);
+        }
+        .p3-anchor-name { font-size: 11px; font-weight: 600; color: #7dd4b0; }
+        .p3-anchor-meta { font-size: 10px; color: rgba(80,180,140,0.6); margin-top: 1px; }
+        .p3-anchor-badge {
+          font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+          padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
+        }
+        .p3-anchor-badge.booked { background: rgba(122,184,122,0.15); color: var(--green); border: 1px solid rgba(122,184,122,0.25); }
+        .p3-anchor-badge.res    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
+        .p3-anchor-badge.warn   { background: rgba(200,169,122,0.12); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
+        .p3-anchor-badge.early  { background: rgba(112,144,208,0.12); color: #7090d0;      border: 1px solid rgba(112,144,208,0.22); }
+
+        /* Collapsible body */
+        .p3-body {
+          max-height: 0; overflow: hidden;
+          transition: max-height 0.6s cubic-bezier(0.32,0.72,0,1);
+        }
+        .p3-open .p3-body { max-height: 4000px; }
+
+        /* Section blocks inside body */
+        .p3-section {
+          border-bottom: 1px solid rgba(255,255,255,0.04);
+          padding: 14px 16px;
+        }
+        .p3-section:last-child { border-bottom: none; }
+
+        .p3-section-label {
+          font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+          margin-bottom: 10px; padding-bottom: 6px;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .p3-section-label.food  { color: #6baa80; }
+        .p3-section-label.coffee { color: #b89060; }
+        .p3-section-label.shop  { color: #8090c0; }
+        .p3-section-label.act   { color: #c06868; }
+        .p3-section-label.note  { color: var(--text-muted); }
+
+        /* POI grid */
+        .p3-poi-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+          gap: 6px;
+        }
+
+        .p3-poi {
+          background: rgba(255,255,255,0.028);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 8px;
+          padding: 8px 10px;
+          transition: background 0.18s, border-color 0.18s;
+        }
+        .p3-poi:hover {
+          background: rgba(255,255,255,0.05);
+          border-color: rgba(255,255,255,0.1);
+        }
+        .p3-poi-name {
+          font-size: 11.5px; font-weight: 600; color: var(--text);
+          line-height: 1.3; margin-bottom: 3px;
+        }
+        .p3-poi-desc {
+          font-size: 10px; color: var(--text-muted); line-height: 1.5;
+        }
+        .p3-poi-badge {
+          display: inline-block; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+          font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
+        }
+        .p3-poi-badge.res    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
+        .p3-poi-badge.warn   { background: rgba(200,169,122,0.12); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
+
+        /* Subzone label within a section */
+        .p3-subzone {
+          font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+          color: var(--text-muted); margin: 10px 0 6px;
+        }
+        .p3-subzone:first-child { margin-top: 0; }
+
+        /* Flow note */
+        .p3-note {
+          font-size: 10.5px; color: var(--text-muted); line-height: 1.65;
+          background: rgba(255,255,255,0.02);
+          border-left: 2px solid rgba(80,180,140,0.25);
+          padding: 8px 12px;
+          border-radius: 0 6px 6px 0;
+        }
+        .p3-note strong { color: var(--text-secondary); font-weight: 600; }
+
+        /* Departure card */
+        .p3-depart {
+          background: #181818;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          padding: 16px 20px;
+          display: flex; align-items: center; gap: 16px;
+        }
+        .p3-depart-date {
+          display: flex; flex-direction: column; align-items: center;
+          width: 52px; flex-shrink: 0;
+          padding: 8px; border-radius: 8px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.07);
+        }
+        .p3-depart-dow { font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .p3-depart-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; }
+        .p3-depart-info { flex: 1; }
+        .p3-depart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .p3-depart-detail { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+        @media (max-width: 600px) {
+          .p3-poi-grid { grid-template-columns: 1fr 1fr; }
+          .p3-date-block { width: 52px; }
+          .p3-num { font-size: 24px; }
+        }
+      
   </style>
 </head>
 <body>
@@ -750,192 +937,6 @@
         </div>
       </div>
 
-      <style>
-        /* ── Phase 3 card system ─────────────────────── */
-        .p3-day {
-          margin-bottom: 8px;
-          opacity: 0; transform: translateY(18px); filter: blur(4px);
-          transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1),
-                      transform 0.7s cubic-bezier(0.32,0.72,0,1),
-                      filter 0.7s cubic-bezier(0.32,0.72,0,1);
-        }
-        .p3-day.revealed { opacity: 1; transform: none; filter: none; }
-        .p3-day.hidden { display: none; }
-
-        .p3-card {
-          background: #181818;
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 16px;
-          overflow: hidden;
-        }
-
-        /* Header strip */
-        .p3-hdr {
-          display: flex; align-items: center; gap: 0;
-          cursor: pointer; user-select: none;
-          border-bottom: 1px solid rgba(255,255,255,0.055);
-          transition: background 0.2s;
-        }
-        .p3-hdr:hover { background: rgba(255,255,255,0.025); }
-
-        .p3-date-block {
-          display: flex; flex-direction: column; align-items: center; justify-content: center;
-          width: 64px; flex-shrink: 0; padding: 14px 0;
-          border-right: 1px solid rgba(255,255,255,0.07);
-        }
-        .p3-dow { font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
-        .p3-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--text); line-height: 1; }
-
-        .p3-hdr-text { flex: 1; padding: 14px 16px; min-width: 0; }
-        .p3-day-name { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.2; }
-        .p3-day-zone { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
-
-        .p3-chevron {
-          width: 28px; height: 28px; margin-right: 14px; flex-shrink: 0;
-          border-radius: 50%; border: 1px solid rgba(255,255,255,0.09);
-          background: rgba(255,255,255,0.03);
-          display: flex; align-items: center; justify-content: center;
-          color: var(--text-muted); font-size: 11px;
-          transition: transform 0.45s cubic-bezier(0.32,0.72,0,1), background 0.25s, border-color 0.25s, color 0.25s;
-        }
-        .p3-open .p3-chevron {
-          transform: rotate(180deg);
-          border-color: rgba(80,180,140,0.3);
-          background: rgba(80,180,140,0.08);
-          color: #50b48c;
-        }
-
-        /* Anchor strip — pinned events at top */
-        .p3-anchors {
-          display: flex; flex-wrap: wrap; gap: 6px;
-          padding: 10px 16px;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
-          background: rgba(80,180,140,0.04);
-        }
-        .p3-anchor-item {
-          display: flex; align-items: center; gap: 7px;
-          background: rgba(80,180,140,0.09);
-          border: 1px solid rgba(80,180,140,0.2);
-          border-radius: 8px;
-          padding: 6px 10px;
-        }
-        .p3-anchor-dot {
-          width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-          background: #50b48c;
-          box-shadow: 0 0 0 2px rgba(80,180,140,0.2);
-        }
-        .p3-anchor-name { font-size: 11px; font-weight: 600; color: #7dd4b0; }
-        .p3-anchor-meta { font-size: 10px; color: rgba(80,180,140,0.6); margin-top: 1px; }
-        .p3-anchor-badge {
-          font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
-          padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
-        }
-        .p3-anchor-badge.booked { background: rgba(122,184,122,0.15); color: var(--green); border: 1px solid rgba(122,184,122,0.25); }
-        .p3-anchor-badge.res    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
-        .p3-anchor-badge.warn   { background: rgba(200,169,122,0.12); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
-        .p3-anchor-badge.early  { background: rgba(112,144,208,0.12); color: #7090d0;      border: 1px solid rgba(112,144,208,0.22); }
-
-        /* Collapsible body */
-        .p3-body {
-          max-height: 0; overflow: hidden;
-          transition: max-height 0.6s cubic-bezier(0.32,0.72,0,1);
-        }
-        .p3-open .p3-body { max-height: 4000px; }
-
-        /* Section blocks inside body */
-        .p3-section {
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-          padding: 14px 16px;
-        }
-        .p3-section:last-child { border-bottom: none; }
-
-        .p3-section-label {
-          font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-          margin-bottom: 10px; padding-bottom: 6px;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .p3-section-label.food  { color: #6baa80; }
-        .p3-section-label.coffee { color: #b89060; }
-        .p3-section-label.shop  { color: #8090c0; }
-        .p3-section-label.act   { color: #c06868; }
-        .p3-section-label.note  { color: var(--text-muted); }
-
-        /* POI grid */
-        .p3-poi-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-          gap: 6px;
-        }
-
-        .p3-poi {
-          background: rgba(255,255,255,0.028);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 8px;
-          padding: 8px 10px;
-          transition: background 0.18s, border-color 0.18s;
-        }
-        .p3-poi:hover {
-          background: rgba(255,255,255,0.05);
-          border-color: rgba(255,255,255,0.1);
-        }
-        .p3-poi-name {
-          font-size: 11.5px; font-weight: 600; color: var(--text);
-          line-height: 1.3; margin-bottom: 3px;
-        }
-        .p3-poi-desc {
-          font-size: 10px; color: var(--text-muted); line-height: 1.5;
-        }
-        .p3-poi-badge {
-          display: inline-block; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
-          font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
-        }
-        .p3-poi-badge.res    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
-        .p3-poi-badge.warn   { background: rgba(200,169,122,0.12); color: var(--accent); border: 1px solid rgba(200,169,122,0.22); }
-
-        /* Subzone label within a section */
-        .p3-subzone {
-          font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-          color: var(--text-muted); margin: 10px 0 6px;
-        }
-        .p3-subzone:first-child { margin-top: 0; }
-
-        /* Flow note */
-        .p3-note {
-          font-size: 10.5px; color: var(--text-muted); line-height: 1.65;
-          background: rgba(255,255,255,0.02);
-          border-left: 2px solid rgba(80,180,140,0.25);
-          padding: 8px 12px;
-          border-radius: 0 6px 6px 0;
-        }
-        .p3-note strong { color: var(--text-secondary); font-weight: 600; }
-
-        /* Departure card */
-        .p3-depart {
-          background: #181818;
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 16px;
-          padding: 16px 20px;
-          display: flex; align-items: center; gap: 16px;
-        }
-        .p3-depart-date {
-          display: flex; flex-direction: column; align-items: center;
-          width: 52px; flex-shrink: 0;
-          padding: 8px; border-radius: 8px;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.07);
-        }
-        .p3-depart-dow { font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
-        .p3-depart-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; }
-        .p3-depart-info { flex: 1; }
-        .p3-depart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-        .p3-depart-detail { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
-
-        @media (max-width: 600px) {
-          .p3-poi-grid { grid-template-columns: 1fr 1fr; }
-          .p3-date-block { width: 52px; }
-          .p3-num { font-size: 24px; }
-        }
-      </style>
 
       <!-- ── Aug 21 — Assembly ─────────────────── -->
       <div class="p3-day" data-phase="3">
@@ -1344,24 +1345,6 @@
         </div>
       </div>
 
-      <script>
-        function toggleP3(id) {
-          var card = document.getElementById(id);
-          if (card) card.classList.toggle('p3-open');
-        }
-        // Hook P3 days into the existing intersection observer scroll reveal
-        document.addEventListener('DOMContentLoaded', function() {
-          var p3days = document.querySelectorAll('.p3-day');
-          if (window.itinObserver) {
-            p3days.forEach(function(el) { window.itinObserver.observe(el); });
-          } else {
-            // Fallback: reveal immediately after a short delay
-            setTimeout(function() {
-              p3days.forEach(function(el) { el.classList.add('revealed'); });
-            }, 100);
-          }
-        });
-      </script>
 
     </div><!-- .itin-root -->
   </div><!-- #view-itinerary -->
@@ -1926,6 +1909,12 @@ function toggleItinDay(id) {
   const inner = document.getElementById(id);
   if (!inner) return;
   inner.classList.toggle('open');
+}
+
+
+function toggleP3(id) {
+  const card = document.getElementById(id);
+  if (card) card.classList.toggle('p3-open');
 }
 
 function filterItinPhase(phase) {
