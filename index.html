@@ -298,7 +298,13 @@
 
     /* ---- Bookings tab ---- */
     #view-bookings { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
-    .bk-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 48px; }
+    .bk-root { max-width: 1280px; margin: 0 auto; padding: 32px 24px 48px; }
+    .bk-columns { display: flex; gap: 20px; align-items: flex-start; }
+    .bk-columns .bk-group { flex: 1; min-width: 0; margin-bottom: 0; }
+    @media (max-width: 800px) {
+      .bk-columns { flex-direction: column; }
+      .bk-columns .bk-group { margin-bottom: 32px; }
+    }
     .bk-root h1 {
       font-family: 'Playfair Display', serif;
       font-size: 32px; font-weight: 900; letter-spacing: -0.02em;
@@ -926,6 +932,8 @@
       <h1>Bookings</h1>
       <div class="bk-subtitle">Aug 15–27 · 5 people</div>
 
+      <div class="bk-columns">
+
       <!-- ── CONFIRMED ───────────────────────────── -->
       <div class="bk-group">
         <div class="bk-group-label confirmed">Confirmed</div>
@@ -1201,7 +1209,8 @@
           </div>
         </div>
 
-      </div>
+      </div><!-- end bk-group action -->
+      </div><!-- end bk-columns -->
     </div>
   </div>
   <div id="view-itinerary" class="view">
