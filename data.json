@@ -155,49 +155,7 @@
         "Shuan": false,
         "Steven": false
       }
-    },
-    {
-      "id": "9987d1e9-670c-47be-a3ce-80444f35bbfd",
-      "date": "2026-06-12",
-      "description": "dinner",
-      "amount": 90.07,
-      "paidBy": "Alvin",
-      "category": "Food",
-      "split": {
-        "type": "even",
-        "people": [
-          "Alvin",
-          "France",
-          "Shuan",
-          "Steven",
-          "James"
-        ],
-        "amountPerPerson": {
-          "Alvin": 18.01,
-          "France": 18.01,
-          "Shuan": 18.01,
-          "Steven": 18.01,
-          "James": 18.02
-        },
-        "jpyAmountPerPerson": {
-          "Alvin": 2888,
-          "France": 2888,
-          "Shuan": 2888,
-          "Steven": 2888,
-          "James": 2889
-        }
-      },
-      "paidBack": {
-        "France": false,
-        "Shuan": false,
-        "Steven": false,
-        "James": false
-      },
-      "inputCurrency": "JPY",
-      "jpyRate": 0.0062371359,
-      "jpyRateAt": "2026-06-12T04:57:25.268Z",
-      "jpyAmount": 14441
     }
   ],
-  "syncedAt": "2026-06-12T05:00:59.621Z"
+  "syncedAt": "2026-06-12T05:04:22.666Z"
 }
