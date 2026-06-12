@@ -128,6 +128,7 @@
     .expense-row:hover { background: var(--surface-raised); }
     .expense-desc { flex: 1; font-size: 13px; color: var(--text); }
     .expense-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .expense-jpy-rate { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-family: 'SF Mono', 'Geist Mono', monospace; }
     .expense-amount { font-size: 13px; color: var(--accent); font-weight: 500; white-space: nowrap; }
 
     /* ---- Category filter chips ---- */
@@ -2130,6 +2131,12 @@ function formatDate(isoDate) {
   return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function formatJpyRateAt(isoStr) {
+  if (!isoStr) return '';
+  const d = new Date(isoStr);
+  return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
 function formatSyncedAt(iso) {
   if (!iso) return 'unknown';
   const d = new Date(iso);
@@ -2247,6 +2254,7 @@ function renderExpenses() {
             <div style="flex:1">
               <div class="expense-desc">${escHtml(e.description)}</div>
               <div class="expense-meta">${escHtml(e.category)} · paid by ${escHtml(e.paidBy)}</div>
+              ${e.inputCurrency === 'JPY' && e.jpyRateAt ? `<div class="expense-jpy-rate">¥${Math.round(e.jpyAmount).toLocaleString()} · 1 ¥ = $${e.jpyRate.toFixed(5)} · rate as of ${formatJpyRateAt(e.jpyRateAt)}</div>` : ''}
             </div>
             <span class="expense-tag ${complete ? 'complete' : 'incomplete'}">${complete ? 'complete' : 'incomplete'}</span>
             <div class="expense-amount">${formatAmount(e.amount, currencySymbol)}</div>
