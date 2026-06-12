@@ -115,10 +115,10 @@
     #view-map {
       position: relative;
       height: calc(100vh - var(--banner-height));
-      display: flex;
       flex-direction: column;
       overflow: hidden;
     }
+    #view-map.active { display: flex; }
     #map-filter-bar { flex-shrink: 0; border-bottom: 1px solid var(--border); }
     #map-phase-nav {
       display: flex;
