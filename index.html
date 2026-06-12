@@ -2182,7 +2182,7 @@
       <div class="leg-row"><div class="leg-dot" style="background:#9070c0"></div>Shopping</div>
       <div class="leg-row"><div class="leg-dot" style="background:#7090c8"></div>Activities</div>
       <div class="leg-row"><div class="leg-dot" style="background:#7ab87a"></div>Accommodations</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#888"></div>Points of Interest</div>
+      <div class="leg-row"><div class="leg-dot" style="background:#888888"></div>Points of Interest</div>
     </div>
   </div>
 
@@ -2889,6 +2889,7 @@ function initMap() {
 }
 
 function filterMapPhase(phase) {
+  if (!_map) return;
   _activeMapPhase = phase;
   document.querySelectorAll('.map-phase-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mapPhase === phase);
