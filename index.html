@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -110,6 +112,68 @@
     #main { flex: 1; overflow-y: auto; padding: 28px 32px; }
     .view { display: none; }
     .view.active { display: block; }
+    #view-map {
+      position: relative;
+      height: calc(100vh - var(--banner-height));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #map-phase-nav {
+      flex-shrink: 0;
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .map-phase-btn {
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .map-phase-btn:hover { color: var(--text); border-color: var(--accent); }
+    .map-phase-btn.active { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 600; }
+    #map-container { flex: 1; min-height: 0; }
+    #map-legend {
+      position: absolute;
+      bottom: 28px;
+      right: 10px;
+      z-index: 1000;
+      background: rgba(26,26,26,0.92);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      line-height: 1.8;
+      pointer-events: none;
+    }
+    #map-legend .leg-row { display: flex; align-items: center; gap: 6px; }
+    #map-legend .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .leaflet-popup-content-wrapper {
+      background: #1a1a1a;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .leaflet-popup-tip { background: #1a1a1a; }
+    .leaflet-popup-content { margin: 10px 14px; font-size: 13px; }
+    .map-pop-cat {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
     h1 { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: var(--text); letter-spacing: -0.01em; }
 
     /* ---- Expenses ---- */
@@ -921,6 +985,7 @@
     <a data-view="accommodations">Stays</a>
     <a data-view="tips">Tips</a>
     <a data-view="bookings">Bookings</a>
+    <a data-view="map">Map</a>
     <a data-view="balances">Balances</a>
     <a data-view="expenses">Expenses</a>
   </nav>
@@ -2104,6 +2169,23 @@
     </div>
   </div>
 
+  <div id="view-map" class="view">
+    <div id="map-phase-nav">
+      <button class="map-phase-btn active" data-map-phase="all">All</button>
+      <button class="map-phase-btn" data-map-phase="1">Phase 1 · Tokyo</button>
+      <button class="map-phase-btn" data-map-phase="2">Phase 2 · Fuji</button>
+      <button class="map-phase-btn" data-map-phase="3">Phase 3 · Tokyo</button>
+    </div>
+    <div id="map-container"></div>
+    <div id="map-legend">
+      <div class="leg-row"><div class="leg-dot" style="background:#c8a97a"></div>Food</div>
+      <div class="leg-row"><div class="leg-dot" style="background:#9070c0"></div>Shopping</div>
+      <div class="leg-row"><div class="leg-dot" style="background:#7090c8"></div>Activities</div>
+      <div class="leg-row"><div class="leg-dot" style="background:#7ab87a"></div>Accommodations</div>
+      <div class="leg-row"><div class="leg-dot" style="background:#888"></div>Points of Interest</div>
+    </div>
+  </div>
+
 </main>
 
 <div id="modal-overlay">
@@ -2111,6 +2193,725 @@
 </div>
 
 <script>
+const MAP_DATA = [
+  {
+    "name": "Gotemba Airbnb",
+    "lat": 35.3009967,
+    "lng": 138.9362405,
+    "category": "Accommodations",
+    "phase": 2
+  },
+  {
+    "name": "Tokyo Airbnb",
+    "lat": 35.7413651,
+    "lng": 139.7343174,
+    "category": "Accommodations",
+    "phase": 1
+  },
+  {
+    "name": "The fun2drive Owners' Club Co., Ltd.",
+    "lat": 35.2768032,
+    "lng": 139.0030231,
+    "category": "Points of Interest",
+    "phase": 2
+  },
+  {
+    "name": "Costco Wholesale Zama Warehouse",
+    "lat": 35.4825789,
+    "lng": 139.4270333,
+    "category": "Points of Interest",
+    "phase": 3
+  },
+  {
+    "name": "Fujisan Parking Lot (former: Fuji-Hokuroku)",
+    "lat": 35.4800197,
+    "lng": 138.7739002,
+    "category": "Points of Interest",
+    "phase": 2
+  },
+  {
+    "name": "Fuji Subaru Line 5th Station",
+    "lat": 35.3948949,
+    "lng": 138.7325799,
+    "category": "Points of Interest",
+    "phase": 2
+  },
+  {
+    "name": "Sushisho Masa",
+    "lat": 35.6595096,
+    "lng": 139.723112,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Kisaburō Nōjō",
+    "lat": 35.7262876,
+    "lng": 139.745621,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "たまごぐらし",
+    "lat": 35.6651279,
+    "lng": 139.7130048,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Sousakumen Hitosuji",
+    "lat": 35.6839253,
+    "lng": 139.6592271,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "ロックンスリー",
+    "lat": 35.5098428,
+    "lng": 139.6145917,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Yukiguni",
+    "lat": 35.4124265,
+    "lng": 139.5124945,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Ramen Gojuban",
+    "lat": 35.7189146,
+    "lng": 139.7219029,
+    "category": "Food",
+    "phase": 1
+  },
+  {
+    "name": "Chukasoba Shibata",
+    "lat": 35.6319655,
+    "lng": 139.5766399,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Chuka Soba Uosei",
+    "lat": 35.044367,
+    "lng": 139.0815742,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "Sushi Keita",
+    "lat": 35.6654054,
+    "lng": 139.7736618,
+    "category": "Food",
+    "phase": 1
+  },
+  {
+    "name": "Menya Sign",
+    "lat": 35.6264119,
+    "lng": 139.7214881,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Ramen Iida Shoten",
+    "lat": 35.1446163,
+    "lng": 139.1097555,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "Azuki to Kōri",
+    "lat": 35.6822614,
+    "lng": 139.6972058,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Tonkatsu Narikura",
+    "lat": 35.6977052,
+    "lng": 139.6387447,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Ginza Kagari - Soba",
+    "lat": 35.6712019,
+    "lng": 139.7613315,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Kotaro",
+    "lat": 35.6555569,
+    "lng": 139.6992802,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Unagi Hashimoto",
+    "lat": 35.709357,
+    "lng": 139.736345,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Aldebaran",
+    "lat": 35.6538103,
+    "lng": 139.7352952,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "SAVOY Azabujuban",
+    "lat": 35.6548695,
+    "lng": 139.7364827,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "The Pizza Bar On 38th",
+    "lat": 35.6869744,
+    "lng": 139.7730333,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Menya Ittou",
+    "lat": 35.718861,
+    "lng": 139.857683,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "European Curry Tomato",
+    "lat": 35.7024686,
+    "lng": 139.6197329,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Fūunji Shinjuku",
+    "lat": 35.6868343,
+    "lng": 139.6966393,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Okuniya Mambei",
+    "lat": 35.0051936,
+    "lng": 135.763335,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "Tonkatsu Tonta",
+    "lat": 35.715484,
+    "lng": 139.7066146,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "HENRY'S BURGER Daikanyama",
+    "lat": 35.6474012,
+    "lng": 139.702129,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "400℃ PIZZA TOKYO",
+    "lat": 35.7002259,
+    "lng": 139.7393865,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Los Tacos Azules",
+    "lat": 35.6383451,
+    "lng": 139.6681172,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Wagyumafia The Cutlet Sandwich",
+    "lat": 35.6440853,
+    "lng": 139.7004345,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Path",
+    "lat": 35.6685131,
+    "lng": 139.6899099,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Centre The Bakery",
+    "lat": 35.6755334,
+    "lng": 139.7665952,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "KOFFEE MAMEYA",
+    "lat": 35.668368,
+    "lng": 139.710888,
+    "category": "Food",
+    "phase": 1
+  },
+  {
+    "name": "A Tes Souhaits",
+    "lat": 35.7090348,
+    "lng": 139.5907228,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Ishiusubiki Teuchi Kyōrakutei",
+    "lat": 35.7007762,
+    "lng": 139.7395083,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Harajuku Gyozarou",
+    "lat": 35.6675016,
+    "lng": 139.7061026,
+    "category": "Food",
+    "phase": 1
+  },
+  {
+    "name": "Homemade Ramen Muginae",
+    "lat": 35.5907765,
+    "lng": 139.7328034,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Sushi Dai",
+    "lat": 35.6443009,
+    "lng": 139.7824528,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Wabi Sabi DX.",
+    "lat": 35.6646064,
+    "lng": 139.782246,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Glitch Coffee and Roasters GINZA",
+    "lat": 35.6689171,
+    "lng": 139.7686324,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Ginza Hachigou",
+    "lat": 35.6705477,
+    "lng": 139.77015,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "BONGENCOFFEE Ginza",
+    "lat": 35.6710713,
+    "lng": 139.7708038,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Parlor Vinefru Ginza shave ice",
+    "lat": 35.672333,
+    "lng": 139.7701711,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Cafe de l'ambre",
+    "lat": 35.6679217,
+    "lng": 139.7622983,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Gyukatsu Motomura Ueno Branch",
+    "lat": 35.7104455,
+    "lng": 139.7744533,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Tensuzu",
+    "lat": 35.7088528,
+    "lng": 139.772453,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Kanazawa Maimon Sushi Ueno",
+    "lat": 35.7068153,
+    "lng": 139.7729306,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Pelican Café",
+    "lat": 35.7069782,
+    "lng": 139.7911622,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "HATCOFFEE",
+    "lat": 35.7072891,
+    "lng": 139.7933029,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "February Cafe",
+    "lat": 35.7083042,
+    "lng": 139.7946526,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Kamejuu",
+    "lat": 35.7107247,
+    "lng": 139.796774,
+    "category": "Food",
+    "phase": 1
+  },
+  {
+    "name": "Kibidango Azuma",
+    "lat": 35.7114834,
+    "lng": 139.7963463,
+    "category": "Food",
+    "phase": 1
+  },
+  {
+    "name": "Murrma Coffee Stop",
+    "lat": 35.6830025,
+    "lng": 139.6836744,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Rāmenya Shima",
+    "lat": 35.6883441,
+    "lng": 139.6808875,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Ogawa Coffee Laboratory Shimokitazawa",
+    "lat": 35.6633394,
+    "lng": 139.6698648,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "cafe viet arco",
+    "lat": 35.6620623,
+    "lng": 139.6659762,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Et -THE CULTURAL COFFEEHOUSE-",
+    "lat": 35.6601304,
+    "lng": 139.6650393,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Miko Sushi Ginza",
+    "lat": 35.6689288,
+    "lng": 139.764291,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Iyoshi Cola",
+    "lat": 35.6644704,
+    "lng": 139.7032379,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Iyoshi Cola Honten Shimo Ochiai",
+    "lat": 35.7150005,
+    "lng": 139.6958157,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "DE FRITES STAAN HARAJUKU",
+    "lat": 35.668498,
+    "lng": 139.7065238,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Komiyama-nishiazabu.",
+    "lat": 35.6616596,
+    "lng": 139.7226718,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Rec Coffee Shibuya East",
+    "lat": 35.6571905,
+    "lng": 139.7079508,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Aji no Nakamura",
+    "lat": 35.6561859,
+    "lng": 139.721441,
+    "category": "Food",
+    "phase": 3
+  },
+  {
+    "name": "Toraya Kobo",
+    "lat": 35.2953757,
+    "lng": 138.9599018,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "とんかつ 壱（はじまり）",
+    "lat": 35.3035074,
+    "lng": 138.9419119,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "鉄板焼「銀明翠」",
+    "lat": 35.296185,
+    "lng": 138.945621,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "Sawayaka Gotemba Premium Outlet branch",
+    "lat": 35.3050066,
+    "lng": 138.9658874,
+    "category": "Food",
+    "phase": 2
+  },
+  {
+    "name": "Shinjuku Batting Center",
+    "lat": 35.696635,
+    "lng": 139.7044715,
+    "category": "Activities",
+    "phase": 3
+  },
+  {
+    "name": "Round One Ikebukuro",
+    "lat": 35.7300652,
+    "lng": 139.7151731,
+    "category": "Activities",
+    "phase": 3
+  },
+  {
+    "name": "Matsudayama Herb Garden",
+    "lat": 35.3515296,
+    "lng": 139.1376646,
+    "category": "Activities",
+    "phase": 2
+  },
+  {
+    "name": "Active Akiba Batting Cage Centre",
+    "lat": 35.6989545,
+    "lng": 139.7747463,
+    "category": "Activities",
+    "phase": 3
+  },
+  {
+    "name": "Kama-Asa",
+    "lat": 35.7138476,
+    "lng": 139.7886768,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "HINOYA",
+    "lat": 35.7103297,
+    "lng": 139.7749341,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "AMERICAYA",
+    "lat": 35.709098,
+    "lng": 139.7749895,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "Whistler",
+    "lat": 35.7041187,
+    "lng": 139.6512871,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "Gotemba Premium Outlets",
+    "lat": 35.307271,
+    "lng": 138.9656467,
+    "category": "Shopping",
+    "phase": 2
+  },
+  {
+    "name": "Kapital",
+    "lat": 35.6723566,
+    "lng": 139.7705344,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "Blue Lug Hatagaya",
+    "lat": 35.6762854,
+    "lng": 139.6709034,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "reload",
+    "lat": 35.6635297,
+    "lng": 139.6701538,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "Bears ベアーズ",
+    "lat": 35.6615693,
+    "lng": 139.6682855,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "古着屋 Re:Re: Garden 下北沢店",
+    "lat": 35.66274,
+    "lng": 139.668119,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "KAPITAL Legs Roppongi",
+    "lat": 35.6600636,
+    "lng": 139.7298273,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "Kapital",
+    "lat": 35.6437093,
+    "lng": 139.7098244,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "duffle with kapital",
+    "lat": 35.6427858,
+    "lng": 139.7101661,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "Kapital Legs",
+    "lat": 35.6421061,
+    "lng": 139.7091477,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "CASANOVA vintage GINZA",
+    "lat": 35.6687784,
+    "lng": 139.7632809,
+    "category": "Shopping",
+    "phase": 3
+  },
+  {
+    "name": "NUIR",
+    "lat": 35.6627103,
+    "lng": 139.6989688,
+    "category": "Shopping",
+    "phase": 3
+  }
+];
+
+// ===== MAP =====
+const MAP_CATEGORY_COLORS = {
+  'Food': '#c8a97a',
+  'Shopping': '#9070c0',
+  'Activities': '#7090c8',
+  'Accommodations': '#7ab87a',
+  'Points of Interest': '#888888',
+};
+
+let _map = null;
+let _mapMarkers = [];
+let _activeMapPhase = 'all';
+
+function initMap() {
+  if (_map) { _map.invalidateSize(); return; }
+
+  _map = L.map('map-container', { zoomControl: true }).setView([35.68, 139.73], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  }).addTo(_map);
+
+  MAP_DATA.forEach(place => {
+    const color = MAP_CATEGORY_COLORS[place.category] || '#888';
+    const marker = L.circleMarker([place.lat, place.lng], {
+      radius: 7,
+      fillColor: color,
+      color: '#111',
+      weight: 1.5,
+      opacity: 1,
+      fillOpacity: 0.88,
+    });
+    marker.bindPopup(
+      `<strong>${place.name}</strong><br><span class="map-pop-cat">${place.category}</span>`
+    );
+    marker._mapPhase = place.phase;
+    _mapMarkers.push(marker);
+    marker.addTo(_map);
+  });
+}
+
+function filterMapPhase(phase) {
+  _activeMapPhase = phase;
+  document.querySelectorAll('.map-phase-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mapPhase === phase);
+  });
+
+  const bounds = L.latLngBounds();
+  _mapMarkers.forEach(m => {
+    const show = phase === 'all' || m._mapPhase === parseInt(phase);
+    if (show) {
+      if (!_map.hasLayer(m)) m.addTo(_map);
+      bounds.extend(m.getLatLng());
+    } else {
+      if (_map.hasLayer(m)) _map.removeLayer(m);
+    }
+  });
+
+  if (bounds.isValid()) _map.fitBounds(bounds, { padding: [50, 50] });
+}
+
+document.querySelectorAll('.map-phase-btn').forEach(btn => {
+  btn.addEventListener('click', () => filterMapPhase(btn.dataset.mapPhase));
+});
+
 let appData = null;
 let activeCategory = null;
 let activeView = 'balances';
@@ -2643,6 +3444,7 @@ document.querySelectorAll('nav a').forEach(link => {
   link.addEventListener('click', () => {
     if (link.dataset.view === 'itinerary') setTimeout(initItinerary, 50);
     if (link.dataset.view === 'tips') setTimeout(revealTipCards, 50);
+    if (link.dataset.view === 'map') setTimeout(initMap, 50);
     navigateTo(link.dataset.view);
   });
 });
@@ -2784,6 +3586,7 @@ const _savedView = localStorage.getItem('activeView') || 'balances';
 navigateTo(_savedView);
 if (_savedView === 'itinerary') setTimeout(initItinerary, 50);
 if (_savedView === 'tips') setTimeout(revealTipCards, 80);
+if (_savedView === 'map') setTimeout(initMap, 50);
 
 </script>
 </body>
