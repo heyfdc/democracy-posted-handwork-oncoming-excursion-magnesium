@@ -283,6 +283,89 @@
       background: var(--accent); color: #0f0f0f;
       border-color: var(--accent); font-weight: 700;
     }
+    .itin-today-btn {
+      margin-left: auto;
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(200,169,122,0.35);
+      background: rgba(200,169,122,0.08); color: var(--accent);
+      font-size: 11px; letter-spacing: 0.06em; cursor: pointer;
+      font-family: inherit; font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.32,0.72,0,1);
+    }
+    .itin-today-btn:hover {
+      background: rgba(200,169,122,0.16); border-color: var(--accent);
+    }
+
+    /* ---- Bookings tab ---- */
+    #view-bookings { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    .bk-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 48px; }
+    .bk-root h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 900; letter-spacing: -0.02em;
+      margin-bottom: 6px; color: var(--text);
+    }
+    .bk-root > .bk-subtitle {
+      font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em;
+      text-transform: uppercase; font-weight: 500; margin-bottom: 36px;
+    }
+    .bk-group { margin-bottom: 40px; }
+    .bk-group-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .bk-group-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .bk-group-label.confirmed { color: var(--green); }
+    .bk-group-label.queue     { color: #7090d0; }
+    .bk-group-label.action    { color: var(--red); }
+    .bk-card {
+      background: var(--surface); border-radius: 10px;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border);
+      margin-bottom: 10px; overflow: hidden;
+    }
+    .bk-card.confirmed { border-left-color: var(--green); }
+    .bk-card.queue     { border-left-color: #7090d0; }
+    .bk-card.action    { border-left-color: var(--red); }
+    .bk-card-hdr {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px 12px;
+    }
+    .bk-card-hdr-text { flex: 1; min-width: 0; }
+    .bk-card-name {
+      font-size: 14px; font-weight: 600; color: var(--text);
+      letter-spacing: -0.01em; margin-bottom: 2px;
+    }
+    .bk-card-date {
+      font-size: 11px; color: var(--text-secondary); font-weight: 500;
+    }
+    .bk-card-loc {
+      font-size: 11px; color: var(--text-muted); margin-top: 1px;
+    }
+    .bk-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+      white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+    }
+    .bk-badge.confirmed { background: rgba(122,184,122,0.12); color: var(--green); border: 1px solid rgba(122,184,122,0.22); }
+    .bk-badge.queue     { background: rgba(112,144,208,0.12); color: #7090d0;      border: 1px solid rgba(112,144,208,0.22); }
+    .bk-badge.action    { background: rgba(184,122,122,0.12); color: var(--red);   border: 1px solid rgba(184,122,122,0.22); }
+    .bk-card-body {
+      padding: 0 16px 14px; border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .bk-card-body ul {
+      margin: 10px 0 0; padding-left: 16px;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .bk-card-body li {
+      font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+    }
+    .bk-card-body li strong { color: var(--text); font-weight: 600; }
+    .bk-card-body li .warn { color: var(--accent); font-weight: 600; }
+    .bk-card-body li .red  { color: var(--red);    font-weight: 600; }
 
     /* ---- Phase header — editorial / Z-axis ---- */
     .itin-phase-header { padding: 40px 0 18px; }
@@ -829,6 +912,7 @@
     <a data-view="itinerary" class="active">Itinerary</a>
     <a data-view="accommodations">Stays</a>
     <a data-view="tips">Tips</a>
+    <a data-view="bookings">Bookings</a>
     <a data-view="balances">Balances</a>
     <a data-view="expenses">Expenses</a>
   </nav>
@@ -837,6 +921,289 @@
 <main id="main">
   <div id="view-expenses" class="view"></div>
   <div id="view-balances" class="view active"></div>
+  <div id="view-bookings" class="view">
+    <div class="bk-root">
+      <h1>Bookings</h1>
+      <div class="bk-subtitle">Aug 15–27 · 5 people</div>
+
+      <!-- ── CONFIRMED ───────────────────────────── -->
+      <div class="bk-group">
+        <div class="bk-group-label confirmed">Confirmed</div>
+
+        <!-- Airbnb Tokyo Sugamo -->
+        <div class="bk-card confirmed">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Airbnb — Sugamo, Tokyo</div>
+              <div class="bk-card-date">Aug 15–17 &amp; Aug 21–27</div>
+              <div class="bk-card-loc">5-chōme-45-8 Sugamo, Toshima City</div>
+            </div>
+            <span class="bk-badge confirmed">Booked</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>2 min walk from Sugamo Station (Mita Line / Yamanote Line)</li>
+              <li>Aug 15 arrival: N'EX → Ikebukuro (~85 min, ¥3,070) → Yamanote Line to Sugamo (2 stops, 4 min)</li>
+              <li><span class="warn">Pre-book N'EX reserved seats</span> before departure from SFO</li>
+              <li>Aug 17 morning: check out, pick up car at Sixt Shibuya, drive to Gotemba</li>
+              <li>Aug 21 evening: James arriving from SFO — confirm check-in time with host</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Sixt Car Rental -->
+        <div class="bk-card confirmed">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Sixt Car Rental — Shibuya</div>
+              <div class="bk-card-date">Aug 17 — pickup morning</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/place/10-4+Udagawach%C5%8D,+Shibuya,+Tokyo+150-0042,+Japan" target="_blank" style="color:var(--text-secondary)">10-4 Udagawacho, Shibuya-ku</a></div>
+            </div>
+            <span class="bk-badge confirmed">Booked</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>Take taxi from Sugamo or ~50 min by train — <span class="warn">leave early</span></li>
+              <li><strong>Confirm ETC card is included</strong> — needed for highway tolls (Tomei Expressway)</li>
+              <li>Drive: Shibuya → Costco Zama → Gotemba Airbnb (~2.5 hrs with stops)</li>
+              <li>Return: Aug 20, drop off before heading back to Tokyo</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Airbnb Gotemba -->
+        <div class="bk-card confirmed">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Airbnb — Gotemba</div>
+              <div class="bk-card-date">Aug 17–20 (3 nights)</div>
+              <div class="bk-card-loc">Gotemba, Shizuoka Prefecture</div>
+            </div>
+            <span class="bk-badge confirmed">Booked</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>On-site gravel driveway parking — use for the rental car</li>
+              <li>Base for Fun2Drive (Aug 18) and Mt. Fuji hike (Aug 19)</li>
+              <li>Costco Zama stop on the way Aug 17 — load up on snacks and drinks for the stretch</li>
+              <li>Checkout Aug 20 morning before Hakone day trip</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Fun2Drive -->
+        <div class="bk-card confirmed">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Fun2Drive — Ultimate Hakone Drive</div>
+              <div class="bk-card-date">Aug 18 · 10:00 AM – 2:30 PM</div>
+              <div class="bk-card-loc">Hakone · Arrive 9:00–9:30 AM</div>
+            </div>
+            <span class="bk-badge confirmed">Booked</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>4.5 hrs guided convoy on the Initial D / MF Ghost roads — Hakone Skyline, Ashinoko Skyline, Turnpike</li>
+              <li>¥59,980/car total (~¥12,000/person); insurance, guide fee, and tax included — <strong>gas + tolls extra (cash only)</strong></li>
+              <li><span class="red">Bring for each driver:</span> original passport · home driver's license · original IDP (physical document — not a photo)</li>
+              <li><span class="red">Credit card required</span> for security deposit — <strong>remove international transaction restrictions before Aug 18</strong></li>
+              <li><span class="warn">Complete membership registration ≥ 24 hrs before start</span> — do this Aug 15 or 16</li>
+              <li>After drive: Gotemba town explore + dinner at Tonkatsu Hajimari (¥5,500 omakase course)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Sushisho Masa -->
+        <div class="bk-card confirmed">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Sushisho Masa</div>
+              <div class="bk-card-date">Aug 22 · 9:00 PM</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/search/Sushisho+Masa+Minami-Aoyama+Tokyo" target="_blank" style="color:var(--text-secondary)">Minami-Aoyama · 15 min taxi from Nakameguro</a></div>
+            </div>
+            <span class="bk-badge confirmed">Booked · 5 ppl</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>High-end omakase counter — one of the best sushi experiences in Tokyo</li>
+              <li><span class="warn">Don't eat heavily during the day</span> — the omakase is long and you'll want to be hungry</li>
+              <li>Budget ~¥30,000–40,000/person including drinks</li>
+              <li>Take a taxi from wherever you are in Nakameguro / Azabu area — do not be late</li>
+              <li>No flash photography; discrete photos are fine. Follow the chef's pace</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── QUEUE ─────────────────────────────────── -->
+      <div class="bk-group">
+        <div class="bk-group-label queue">Queue / Early Start</div>
+
+        <!-- Sushi Dai -->
+        <div class="bk-card queue">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Sushi Dai — Toyosu Market</div>
+              <div class="bk-card-date">Aug 24 · Queue by 4:15 AM</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/search/Sushi+Dai+Toyosu+Market+Tokyo" target="_blank" style="color:var(--text-secondary)">Toyosu Market, Building 6 · Kōtō-ku</a></div>
+            </div>
+            <span class="bk-badge queue">Queue 4:15 AM</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>Bib Gourmand omakase — ~¥5,500/person · <span class="red">cash only</span></li>
+              <li>No reservation — first-come queue. <span class="warn">Arrive by 4:15 AM or earlier.</span> Queue fills fast; the market clock runs early</li>
+              <li>Restaurant opens ~5:30 AM; expect to be seated and done by ~8 AM</li>
+              <li>10-piece omakase: chef shows you the options for each piece, you choose. Let the chef know any allergies</li>
+              <li>After: Tsukiji Outer Market wander (10 min taxi), then Ginza for the rest of the day</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ACTION NEEDED ─────────────────────────── -->
+      <div class="bk-group">
+        <div class="bk-group-label action">Action Needed</div>
+
+        <!-- Sushi Keita -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Sushi Keita</div>
+              <div class="bk-card-date">Aug 16 (primary) · Aug 27 (fallback)</div>
+              <div class="bk-card-loc"><a href="https://tabelog.com/en/tokyo/A1313/A131301/13213360/" target="_blank" style="color:var(--text-secondary)">Tokyo</a></div>
+            </div>
+            <span class="bk-badge action">omakase.in</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>1 Michelin star omakase — reserve via <strong>omakase.in</strong></li>
+              <li>Aug 16 (Tokyo Day 1) is the primary target; Aug 27 (last night) as final fallback</li>
+              <li>Book well in advance — Michelin slots fill fast</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Mt. Fuji Gate -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Mt. Fuji Trail Gate Slot</div>
+              <div class="bk-card-date">Aug 19 (hike day)</div>
+              <div class="bk-card-loc">fujisan-climb.jp · 5th Station, Yoshida Trail</div>
+            </div>
+            <span class="bk-badge action">Reserve</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>¥4,000/person gate fee — reserve at <strong>fujisan-climb.jp</strong> (slots open May/Jun 2026)</li>
+              <li><span class="red">Gate closes 2:00 PM for non-hut guests</span> — plan to pass the gate well before noon</li>
+              <li>Proper hiking boots mandatory (they check) · No flip flops or sneakers</li>
+              <li>Shuttle from Fujisan Parking: depart ~3:15 AM, first bus ~4:00 AM, arrives 5th Station 4:45 AM — <strong>pre-buy via Jorudan</strong> (¥3,000 round trip)</li>
+              <li>Gear: headlamps · warm layers (summit ~5°C) · gloves · snacks · 1.5L+ water · blister kit</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Ramen Iida Shoten -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Ramen Iida Shoten</div>
+              <div class="bk-card-date">Aug 20 (Hakone day) — if reservation lands</div>
+              <div class="bk-card-loc">Hakone / Yugawara area</div>
+            </div>
+            <span class="bk-badge action">Reserve</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>Reservation-only — highly sought after. If you can't get it, Aug 20 becomes an onsen day instead</li>
+              <li>Reserve as early as possible; slots open on a rolling window</li>
+              <li>If skipped: Hakone Open-Air Museum (~25 min from Gotemba Airbnb) + local onsen is the fallback</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tokyo Tower Pickleball -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Tokyo Tower Pickleball</div>
+              <div class="bk-card-date">Aug 22 or Aug 24 — afternoon slot</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/search/Tokyo+Tower+FootTown+Pickleball+Tokyo" target="_blank" style="color:var(--text-secondary)">Tokyo Tower FootTown · Minato-ku</a></div>
+            </div>
+            <span class="bk-badge action">Book — reserva.be</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>Rooftop courts at Tokyo Tower FootTown — book a time slot via <strong>reserva.be</strong></li>
+              <li>Court rental by time slot; must book the whole court. Paddles and balls free to borrow at reception</li>
+              <li>Aug 22: works as an afternoon activity before Sushisho Masa at 9 PM (~2.5 km to Minami-Aoyama)</li>
+              <li>Aug 24: alternative slot after the early Sushi Dai morning — ~2.7 km from Ginza</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Kotaro -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Kotaro</div>
+              <div class="bk-card-date">Aug 22+ · 30-day rolling window</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/search/Kotaro+izakaya+Omotesando+Tokyo+Japan" target="_blank" style="color:var(--text-secondary)">Omotesando · Tokyo</a></div>
+            </div>
+            <span class="bk-badge action">Call 1 PM JST</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>Widely considered the best premium izakaya in Tokyo — exceptional seasonal Japanese cuisine</li>
+              <li><span class="red">Call at exactly 1:00 PM JST daily</span> — 30-day rolling window means slots for Aug 22 open Aug 22 (call Aug 22 at 1 PM JST for same-night availability)</li>
+              <li>Keep calling every day; persistence is the only strategy. If you get it, it's the best meal of the trip</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Komiyama -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Komiyama-nishiazabu</div>
+              <div class="bk-card-date">Aug 22 or Aug 27</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/search/Komiyama+Nishi-Azabu+wagyu+Tokyo+Japan" target="_blank" style="color:var(--text-secondary)">Nishi-Azabu · Tokyo</a></div>
+            </div>
+            <span class="bk-badge action">Reserve</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>Omi wagyu omakase counter — intimate, high-grade wagyu in a counter setting</li>
+              <li>Reserve in advance; seats are limited. Try Aug 22 first — Aug 27 as fallback (last night)</li>
+              <li>Near Sushisho Masa (Minami-Aoyama area) — can be an earlier stop on Aug 22 before the omakase</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Wagyu Tobiuishi -->
+        <div class="bk-card action">
+          <div class="bk-card-hdr">
+            <div class="bk-card-hdr-text">
+              <div class="bk-card-name">Wagyu Tobiuishi Iidabashi</div>
+              <div class="bk-card-date">Aug 24 or Aug 27</div>
+              <div class="bk-card-loc"><a href="https://www.google.com/maps/search/Wagyu+Tobiuishi+Iidabashi+Tokyo+Japan" target="_blank" style="color:var(--text-secondary)">Iidabashi · Tokyo</a></div>
+            </div>
+            <span class="bk-badge action">Tabelog</span>
+          </div>
+          <div class="bk-card-body">
+            <ul>
+              <li>All-private-room wagyu yakiniku — best group send-off dinner option</li>
+              <li>~¥8,000–9,000/person · Reserve via Tabelog</li>
+              <li>Short ride from Ginza (Aug 24 flow) or from Shinjuku/Ikebukuro (Aug 27 last night)</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
   <div id="view-itinerary" class="view">
     <div class="itin-root">
 
@@ -862,6 +1229,7 @@
         <button class="itin-phase-btn" onclick="filterItinPhase('1')">Phase 1 · Tokyo</button>
         <button class="itin-phase-btn" onclick="filterItinPhase('2')">Phase 2 · Fuji</button>
         <button class="itin-phase-btn" onclick="filterItinPhase('3')">Phase 3 · Tokyo</button>
+        <button class="itin-today-btn" onclick="jumpToToday()">Today</button>
       </div>
 
       <!-- ── PHASE 1 ─────────────────────────────────── -->
@@ -895,7 +1263,7 @@
             </div>
             <div class="itin-event">
               <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
-              <div class="itin-evt-body"><strong>Check in · Creative Terrace UNBOUND<span class="itin-badge-book">Booked</span></strong><p>5-chōme-45-8 Sugamo, Toshima City · 4 bedrooms, 5 beds, 123㎡ · ★5.0 · 2 stops to Ikebukuro</p></div>
+              <div class="itin-evt-body"><strong>Check in Airbnb<span class="itin-badge-book">Booked</span></strong><p>5-chōme-45-8 Sugamo, Toshima City</p></div>
             </div>
             <div class="itin-event hi">
               <span class="itin-evt-time">Dinner</span><div class="itin-evt-dot gold"></div>
@@ -2300,6 +2668,38 @@ function toggleItinDay(id) {
 function toggleP3(id) {
   const card = document.getElementById(id);
   if (card) card.classList.toggle('p3-open');
+}
+
+function jumpToToday() {
+  const now = new Date();
+  const m = now.getMonth() + 1; // 1-indexed
+  const d = now.getDate();
+
+  // Map current date to a trip day (Aug 15–27); clamp outside range
+  let tripDay;
+  if (m < 8 || (m === 8 && d < 15)) tripDay = 15;
+  else if (m > 8 || (m === 8 && d > 27)) tripDay = 27;
+  else tripDay = d;
+
+  const phase  = tripDay <= 16 ? '1' : tripDay <= 20 ? '2' : '3';
+  const id     = tripDay <= 20 ? `iday-${tripDay}` : `p3-${tripDay}`;
+  const isP3   = phase === '3';
+
+  // Navigate to itinerary tab
+  navigateTo('itinerary');
+
+  // Switch phase filter to show the right days
+  filterItinPhase(phase);
+
+  // Open the day card if not already open
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (isP3 && !el.classList.contains('p3-open')) toggleP3(id);
+  if (!isP3 && !el.classList.contains('open')) toggleItinDay(id);
+
+  // Scroll to the day container
+  const scrollTarget = el.closest('.itin-day, .p3-day') || el;
+  setTimeout(() => scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
 }
 
 function filterItinPhase(phase) {
