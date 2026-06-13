@@ -3403,7 +3403,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== NAVIGATION =====
 function navigateTo(view) {
   const el = document.getElementById(`view-${view}`);
-  if (!el) { navigateTo('balances'); return; }
+  if (!el) { if (view !== 'balances') navigateTo('balances'); return; }
   document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
   const link = document.querySelector(`nav a[data-view="${view}"]`);
   if (link) link.classList.add('active');
