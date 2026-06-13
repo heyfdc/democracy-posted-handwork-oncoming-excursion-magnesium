@@ -304,7 +304,7 @@
       nav a.active { border-left-color: transparent; border-top-color: var(--accent); border-bottom-color: transparent; background: transparent; }
       #main { padding: 20px 16px 72px; overflow-y: auto; }
       #main:has(#view-map.active) { padding: 0; overflow: hidden; }
-      #view-map { height: calc(100svh - var(--banner-height) - 72px); }
+      #view-map { height: calc(100svh - var(--banner-height) - 72px - env(safe-area-inset-bottom)); }
     }
 
     /* =================== ITINERARY — REDESIGNED =================== */
