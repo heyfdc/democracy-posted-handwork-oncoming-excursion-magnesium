@@ -1,7 +1,22 @@
+# Dev app (local only)
 app.html
+data.json
+
+# Dev scripts and tooling
 scripts/
-src/
+src/logic.js
 tests/
 docs/
+
+# AI/tooling artifacts
 .superpowers/
+.claude/
+
+# Build caches
+.pytest_cache/
+__pycache__/
+*.pyc
+node_modules/
+
+# Old data snapshots
 japan-costs-*.json
