@@ -3402,11 +3402,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== NAVIGATION =====
 function navigateTo(view) {
+  const el = document.getElementById(`view-${view}`);
+  if (!el) { navigateTo('balances'); return; }
   document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
   const link = document.querySelector(`nav a[data-view="${view}"]`);
   if (link) link.classList.add('active');
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(`view-${view}`).classList.add('active');
+  el.classList.add('active');
   activeView = view;
   localStorage.setItem('activeView', view);
   if (appData) renderCurrentView();
