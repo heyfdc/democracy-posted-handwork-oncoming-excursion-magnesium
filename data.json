@@ -1,0 +1,161 @@
+{
+  "tripName": "da boyz terrorize japan",
+  "currencySymbol": "$",
+  "people": [
+    "Alvin",
+    "France",
+    "Shuan",
+    "Steven",
+    "James"
+  ],
+  "categories": [
+    "Food",
+    "Accommodations",
+    "Activities",
+    "Travel",
+    "Miscellaneous"
+  ],
+  "expenses": [
+    {
+      "id": "d6fbacab-e489-41eb-a35f-6113f7e67b69",
+      "date": "2026-06-04",
+      "description": "Gotemba Airbnb",
+      "amount": 597.91,
+      "paidBy": "France",
+      "category": "Accommodations",
+      "split": {
+        "type": "even",
+        "people": [
+          "Alvin",
+          "France",
+          "Shuan",
+          "Steven"
+        ],
+        "amountPerPerson": {
+          "Alvin": 149.48,
+          "France": 149.48,
+          "Shuan": 149.48,
+          "Steven": 149.47
+        }
+      },
+      "paidBack": {
+        "Shuan": false,
+        "Alvin": false,
+        "Steven": true
+      }
+    },
+    {
+      "id": "840c5fff-0331-43ad-b1cc-aa499b981a8c",
+      "date": "2026-08-06",
+      "description": "Tokyo Airbnb",
+      "amount": 3154.22,
+      "paidBy": "France",
+      "category": "Accommodations",
+      "split": {
+        "type": "even",
+        "people": [
+          "Alvin",
+          "France",
+          "Shuan",
+          "Steven",
+          "James"
+        ],
+        "amountPerPerson": {
+          "Alvin": 500,
+          "France": 1404.22,
+          "Shuan": 500,
+          "Steven": 500,
+          "James": 250
+        }
+      },
+      "paidBack": {
+        "Shuan": false,
+        "Alvin": false,
+        "Steven": true,
+        "James": true
+      }
+    },
+    {
+      "id": "ecdccb16-95b8-4ebf-8863-5c612fee61ce",
+      "date": "2026-05-30",
+      "description": "Sushisho Masa",
+      "amount": 1106.36,
+      "paidBy": "France",
+      "category": "Food",
+      "split": {
+        "type": "even",
+        "people": [
+          "Alvin",
+          "France",
+          "Shuan",
+          "Steven",
+          "James"
+        ],
+        "amountPerPerson": {
+          "Alvin": 221.27,
+          "France": 221.28,
+          "Shuan": 221.27,
+          "Steven": 221.27,
+          "James": 221.27
+        }
+      },
+      "paidBack": {
+        "Alvin": false,
+        "Steven": true,
+        "James": true
+      }
+    },
+    {
+      "id": "e47ffe89-b170-4896-ae46-d575891d16b9",
+      "date": "2026-05-01",
+      "description": "SFO -> NRT Flight",
+      "amount": 200,
+      "paidBy": "France",
+      "category": "Travel",
+      "split": {
+        "type": "even",
+        "people": [
+          "Alvin",
+          "Shuan"
+        ],
+        "amountPerPerson": {
+          "Alvin": 100,
+          "Shuan": 100
+        }
+      },
+      "paidBack": {
+        "Alvin": false,
+        "Shuan": true
+      }
+    },
+    {
+      "id": "4e887a8d-da49-466f-9f59-8d57a62fc2ec",
+      "date": "2026-06-07",
+      "description": "Car Rental 4/17 - 4/21",
+      "amount": 684.62,
+      "paidBy": "France",
+      "category": "Travel",
+      "split": {
+        "type": "even",
+        "people": [
+          "Alvin",
+          "France",
+          "Shuan",
+          "Steven"
+        ],
+        "amountPerPerson": {
+          "Alvin": 100,
+          "France": 384.62,
+          "Shuan": 100,
+          "Steven": 100
+        }
+      },
+      "paidBack": {
+        "Alvin": false,
+        "Shuan": false,
+        "Steven": false
+      }
+    }
+  ],
+  "syncedAt": "2026-06-12T05:04:22.666Z"
+}

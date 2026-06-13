@@ -1,6 +1,5 @@
 # Dev app (local only)
 app.html
-data.json
 
 # Dev scripts and tooling
 scripts/
