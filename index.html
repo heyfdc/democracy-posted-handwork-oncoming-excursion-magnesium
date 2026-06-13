@@ -178,9 +178,10 @@
       padding: 8px 12px;
       font-size: 11px;
       line-height: 1.8;
-      pointer-events: none;
     }
-    #map-legend .leg-row { display: flex; align-items: center; gap: 6px; }
+    #map-legend .leg-row { display: flex; align-items: center; gap: 6px; cursor: pointer; transition: opacity 0.15s; }
+    #map-legend .leg-row:hover { opacity: 0.75; }
+    #map-legend .leg-row.hidden-cat { opacity: 0.35; }
     #map-legend .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
     .leaflet-popup-content-wrapper {
       background: #1a1a1a;
@@ -1865,11 +1866,11 @@
     </div>
     <div id="map-container"></div>
     <div id="map-legend">
-      <div class="leg-row"><div class="leg-dot" style="background:#c8a97a"></div>Food</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#9070c0"></div>Shopping</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#7090c8"></div>Activities</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#7ab87a"></div>Accommodations</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#888888"></div>Points of Interest</div>
+      <div class="leg-row" data-category="Food"><div class="leg-dot" style="background:#c8a97a"></div>Food</div>
+      <div class="leg-row" data-category="Shopping"><div class="leg-dot" style="background:#9070c0"></div>Shopping</div>
+      <div class="leg-row" data-category="Activities"><div class="leg-dot" style="background:#7090c8"></div>Activities</div>
+      <div class="leg-row" data-category="Accommodations"><div class="leg-dot" style="background:#7ab87a"></div>Accommodations</div>
+      <div class="leg-row" data-category="Points of Interest"><div class="leg-dot" style="background:#888888"></div>Points of Interest</div>
     </div>
   </div>
 
@@ -1906,6 +1907,9 @@ const MAP_CATEGORY_COLORS = {
 
 let _map = null;
 let _mapMarkers = [];
+let _hiddenCategories = new Set();
+let _activePhase = 'all';
+let _activeDay = null;
 
 function initMap() {
   if (_map) { _map.invalidateSize(); return; }
@@ -1930,6 +1934,7 @@ function initMap() {
     marker.bindPopup(buildPopupHtml(place));
     marker._mapPhase = place.phase;
     marker._mapDays = place.days;
+    marker._mapCategory = place.category;
     _mapMarkers.push(marker);
     marker.addTo(_map);
   });
@@ -1937,6 +1942,8 @@ function initMap() {
 
 function applyMapFilter(phase, day) {
   if (!_map) return;
+  _activePhase = phase;
+  _activeDay = day;
 
   _phaseBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mapPhase === phase && day === null);
@@ -1953,6 +1960,7 @@ function applyMapFilter(phase, day) {
     } else {
       show = phase === 'all' || m._mapPhase === parseInt(phase);
     }
+    show = show && !_hiddenCategories.has(m._mapCategory);
     if (show) {
       if (!_map.hasLayer(m)) m.addTo(_map);
       bounds.extend(m.getLatLng());
@@ -1975,6 +1983,20 @@ _phaseBtns.forEach(btn => {
 });
 _dayBtns.forEach(btn => {
   btn.addEventListener('click', () => filterMapDay(btn.dataset.mapDay));
+});
+
+document.querySelectorAll('#map-legend .leg-row[data-category]').forEach(row => {
+  row.addEventListener('click', () => {
+    const cat = row.dataset.category;
+    if (_hiddenCategories.has(cat)) {
+      _hiddenCategories.delete(cat);
+      row.classList.remove('hidden-cat');
+    } else {
+      _hiddenCategories.add(cat);
+      row.classList.add('hidden-cat');
+    }
+    applyMapFilter(_activePhase, _activeDay);
+  });
 });
 
 let appData = null;
