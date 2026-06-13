@@ -1888,7 +1888,6 @@ const MAP_CATEGORY_COLORS = {
 
 let _map = null;
 let _mapMarkers = [];
-let _activeMapPhase = 'all';
 
 function initMap() {
   if (_map) { _map.invalidateSize(); return; }
@@ -1922,12 +1921,11 @@ function initMap() {
 
 function applyMapFilter(phase, day) {
   if (!_map) return;
-  _activeMapPhase = phase;
 
-  document.querySelectorAll('.map-phase-btn').forEach(btn => {
+  _phaseBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mapPhase === phase && day === null);
   });
-  document.querySelectorAll('.map-day-btn').forEach(btn => {
+  _dayBtns.forEach(btn => {
     btn.classList.toggle('active', day !== null && btn.dataset.mapDay === String(day));
   });
 
@@ -1953,10 +1951,13 @@ function applyMapFilter(phase, day) {
 function filterMapPhase(phase) { applyMapFilter(phase, null); }
 function filterMapDay(day) { applyMapFilter('all', parseInt(day)); }
 
-document.querySelectorAll('.map-phase-btn').forEach(btn => {
+const _phaseBtns = document.querySelectorAll('.map-phase-btn');
+const _dayBtns = document.querySelectorAll('.map-day-btn');
+
+_phaseBtns.forEach(btn => {
   btn.addEventListener('click', () => filterMapPhase(btn.dataset.mapPhase));
 });
-document.querySelectorAll('.map-day-btn').forEach(btn => {
+_dayBtns.forEach(btn => {
   btn.addEventListener('click', () => filterMapDay(btn.dataset.mapDay));
 });
 
