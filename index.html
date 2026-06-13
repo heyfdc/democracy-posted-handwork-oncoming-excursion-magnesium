@@ -190,7 +190,9 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.5);
     }
     .leaflet-popup-tip { background: #1a1a1a; }
-    .leaflet-popup-content { margin: 10px 14px; font-size: 13px; }
+    .leaflet-popup-content { margin: 12px 16px; font-size: 13px; min-width: 190px; }
+    .map-pop-name { display: block; font-weight: 600; font-size: 14px; margin-bottom: 5px; color: var(--text); }
+    .map-pop-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 5px; }
     .map-pop-cat {
       display: inline-block;
       font-size: 10px;
@@ -198,8 +200,25 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-top: 3px;
     }
+    .map-pop-phase {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .map-pop-days { font-size: 11px; color: var(--text-muted); margin-bottom: 7px; }
+    .map-pop-link {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
+      width: 100%;
+    }
+    .map-pop-link:hover { text-decoration: underline; }
     h1 { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: var(--text); letter-spacing: -0.01em; }
 
     /* ---- Expenses ---- */
@@ -1878,6 +1897,27 @@
 <script>
 
 // ===== MAP =====
+const PHASE_LABELS = {
+  1: 'Phase 1 · Tokyo',
+  2: 'Phase 2 · Fuji',
+  3: 'Phase 3 · Tokyo',
+};
+
+function buildPopupHtml(place) {
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+  const daysStr = formatDays(place.days);
+  const phaseLabel = PHASE_LABELS[place.phase] || '';
+  return `
+    <span class="map-pop-name">${place.name}</span>
+    <div class="map-pop-meta">
+      <span class="map-pop-cat">${place.category}</span>
+      ${phaseLabel ? `<span class="map-pop-phase">${phaseLabel}</span>` : ''}
+    </div>
+    ${daysStr ? `<div class="map-pop-days">${daysStr}</div>` : ''}
+    <a class="map-pop-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a>
+  `;
+}
+
 const MAP_CATEGORY_COLORS = {
   'Food': '#c8a97a',
   'Shopping': '#9070c0',
@@ -1909,9 +1949,7 @@ function initMap() {
       opacity: 1,
       fillOpacity: 0.88,
     });
-    marker.bindPopup(
-      `<strong>${place.name}</strong><br><span class="map-pop-cat">${place.category}</span>`
-    );
+    marker.bindPopup(buildPopupHtml(place));
     marker._mapPhase = place.phase;
     marker._mapDays = place.days;
     _mapMarkers.push(marker);
