@@ -1167,7 +1167,7 @@
             <div class="itin-day-date"><span class="itin-day-dow">THU</span><span class="itin-day-num-lbl">20</span></div>
             <div class="itin-day-info">
               <div class="itin-day-title">Hakone Day Trip</div>
-              <div class="itin-day-sub">Day Trip + Onsen OR Yugawara + Ramen Iida Shoten</div>
+              <div class="itin-day-sub">Tenzan Onsen OR Yugawara + Ramen Iida Shoten</div>
             </div>
             <span class="itin-loc hakone">Hakone</span>
             <span class="itin-chevron">▾</span>
@@ -1179,7 +1179,7 @@
             </div>
             <div class="itin-event hi">
               <span class="itin-evt-time">All Day</span><div class="itin-evt-dot gold"></div>
-              <div class="itin-evt-body"><strong>Day Trip + Onsen OR Yugawara / Ramen Iidea Shoten</strong><p>Highly depends on if we get reservations to Ramen Iida Shoten. If not, we go onsen.</p></div>
+              <div class="itin-evt-body"><strong><a href="https://tenzan.jp/tenzan/" target="_blank" style="color:inherit">Tenzan Onsen (天山湯治郷)</a> OR Yugawara / Ramen Iida Shoten</strong><p>Highly depends on if we get reservations to Ramen Iida Shoten. If not, Tenzan in Hakone-Yumoto — multiple outdoor baths, no tattoo restrictions, adults ¥1,400. ~15 min from Airbnb.</p></div>
             </div>
             <div class="itin-event">
               <span class="itin-evt-time">Evening</span><div class="itin-evt-dot"></div>
@@ -1894,7 +1894,10 @@ function buildPopupHtml(place) {
   const desc = place.description
     ? `<p class="map-pop-desc">${place.description}</p>`
     : '';
-  return `${thumb}<div class="map-pop-body"><span class="map-pop-name">${place.name}</span><span class="map-pop-cat">${place.category}</span>${desc}<a class="map-pop-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a></div>`;
+  const websiteLink = place.url
+    ? `<a class="map-pop-link" href="${place.url}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>`
+    : '';
+  return `${thumb}<div class="map-pop-body"><span class="map-pop-name">${place.name}</span><span class="map-pop-cat">${place.category}</span>${desc}${websiteLink}<a class="map-pop-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a></div>`;
 }
 
 const MAP_CATEGORY_COLORS = {
